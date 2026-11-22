@@ -406,7 +406,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
       <article class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/><circle cx="12" cy="15" r="1.5"/></svg></div>
         <h3>TMDB Key 只存本机</h3>
-        <p>Key 只保存在当前浏览器的 localStorage，作者没有后台服务器，收不到。输入框下方有 <b>“清除 TMDB Key”</b>，点一下就能清空。</p>
+        <p>Key 只保存在当前浏览器的 localStorage，官网只有一个邮件表单接口，收不到 Key。输入框下方有 <b>“清除 TMDB Key”</b>，点一下就能清空。</p>
       </article>
       <article class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h7l2 3h9v9H3z"/><path d="M8 16h8"/></svg></div>
@@ -541,7 +541,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
     <div class="faq-grid">
       <details class="faq"><summary>会不会上传我的视频？</summary><p><b>不会。</b> 工具只读取目录和文件名，生成播放文件；视频本身不上传，也不经过作者的服务器。</p></details>
       <details class="faq"><summary>没有 TMDB Key 能用吗？</summary><p><b>能用。</b> 会生成基础影片信息和本地标题封面，Jellyfin / Emby 照样能识别剧集结构和集号；只是没有简介、评分和官方海报。</p></details>
-      <details class="faq"><summary>Key 会被作者看到吗？</summary><p><b>不会。</b> Key 只保存在你的浏览器里；作者没有后台服务器，也没有任何接口接收它。你可以随时点“清除 TMDB Key”，或清除浏览器数据。</p></details>
+      <details class="faq"><summary>Key 会被作者看到吗？</summary><p><b>不会。</b> Key 只保存在你的浏览器里；官网只有一个邮件表单接口，不接收 Key。你可以随时点“清除 TMDB Key”，或清除浏览器数据。</p></details>
       <details class="faq"><summary>为什么需要 TMDB？</summary><p>TMDB 是一个公开的影视资料库。工具把片名发过去，换回简介、评分、演职员和官方海报。不填 Key 也能用，只是资料会少一些。</p></details>
       <details class="faq"><summary>支持 Jellyfin / Emby 吗？</summary><p><b>支持。</b> 生成的是它们能识别的 <b>.strm</b>、NFO 和图片目录结构。这里是兼容说明，不代表官方合作或认证。</p></details>
       <details class="faq"><summary>NAS 密码会被保存吗？</summary><p><b>不会。</b> OpenList 的密码只在当前页面内存里使用，关掉页面就没了；配置文件也不会写入密码。</p></details>
@@ -564,7 +564,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
         <div class="kicker" style="margin-bottom:8px">作者的话</div>
         <h3><span data-author>影音入库箱作者</span>，个人开发者</h3>
         <p>我做这个工具，是因为自己用 Jellyfin 整理剧集太麻烦：文件名乱、集号乱、海报还要一张张找。于是把它做成了一个不用安装、打开就能用的网页。</p>
-        <p>这不是公司产品。没有后台服务器，我收不到你的视频、Key 或 NAS 密码。更新节奏不固定，但重要问题会优先修。</p>
+        <p>这不是公司产品。官网只有一个邮件表单接口，我收不到你的视频、Key 或 NAS 密码。更新节奏不固定，但重要问题会优先修。</p>
         <div class="quote">“我不敢说它完美，但尽量做到三件事：不碰你的视频和密码；不在后台收数据；出了问题能找到我。”</div>
         <div class="about-links">
           <a data-repo-link href="https://gitee.com/a-splash-of-water/yingyin-box" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 9l-3 3 3 3M16 9l3 3-3 3M13 6l-2 12"/></svg>代码与更新记录</a>
