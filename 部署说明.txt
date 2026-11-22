@@ -10,25 +10,25 @@ https://yingyin-box-site.pages.dev/
 - 已用 Cloudflare Pages 免费静态托管上线。
 - 项目名：yingyin-box-site
 - 生产分支：main
+- 官网是静态页面；只有一个 /api/contact 邮件函数，不接收视频、不保存 Key。
 - 不需要备案，免费额度够用。
 - Gitee Pages 已经下线，不要再按旧教程去 Gitee 开 Pages。
 
 
 以后怎么更新
 ------------
-方法一：命令行（推荐，最快）
-1. 在本目录打开 PowerShell。
+方法一：一键脚本（推荐，最快）
+1. 打开项目根目录（不是 gitee-site 子目录）。
 2. 确认本机已设置 CLOUDFLARE_API_TOKEN 和 CLOUDFLARE_ACCOUNT_ID。
 3. 执行：
-   npx wrangler pages deploy . --project-name yingyin-box-site --branch main
-4. 等命令输出 Deployment complete，打开上面的网址刷新即可。
+   .\更新官网.ps1
+4. 脚本会复制 functions、推送 Gitee、部署 Cloudflare，看到 Deployment complete 后刷新官网。
 
-方法二：网页上传
-1. 打开 https://dash.cloudflare.com/
-2. 进入 Workers & Pages → yingyin-box-site。
-3. 点“创建新部署”，选“上传静态文件”。
-4. 把本目录里的 index.html、downloads 文件夹等一起拖进去。
-5. 点部署，等完成。
+方法二：手动 Wrangler
+在本目录执行：
+   npx wrangler pages deploy . --project-name yingyin-box-site --branch main
+
+注意：邮件接口依赖 functions/，必须用 Wrangler 部署；Cloudflare 控制台的“拖拽上传”不支持 Functions。
 
 
 文件怎么放
@@ -36,11 +36,28 @@ https://yingyin-box-site.pages.dev/
 index.html                        首页，必须放在最外层
 downloads/yingyin-box-v5.7.html   网页版工具
 downloads/yingyin-box-v5.7.zip    完整包
+functions/api/contact.js          /api/contact 邮件直发表单
 README.md                         项目说明
 LICENSE                           MIT 许可证
 部署说明.txt                      本文件
 
 注意：downloads 文件夹要整个上传，不能只传 index.html。
+
+
+邮件直发表单
+------------
+需要在 Cloudflare Pages 项目里设置两个 Secret：
+  CONTACT_TO       收件邮箱（不写进网页）
+  RESEND_API_KEY   Resend 发送权限 API Key（不写进网页/仓库）
+
+可选：
+  CONTACT_FROM     默认 影音入库箱官网 <onboarding@resend.dev>
+
+设置命令：
+  npx wrangler pages secret put CONTACT_TO --project-name yingyin-box-site
+  npx wrangler pages secret put RESEND_API_KEY --project-name yingyin-box-site
+
+缺少 RESEND_API_KEY 时，/api/contact 返回 503，页面会提示改用“直接打开邮箱”或“复制内容”。
 
 
 改作者信息
@@ -56,4 +73,5 @@ LICENSE                           MIT 许可证
 安全提醒
 --------
 - Cloudflare API Token 只放在本机环境变量或临时文件，不要写进网页、README、Git 仓库。
-- 本站没有后端，不接收视频，不保存 TMDB Key。
+- RESEND_API_KEY 只放 Cloudflare Pages Secret，不要写进网页、仓库或聊天记录。
+- 本站只接收邮件表单文字，不接收视频，不保存 TMDB Key。
