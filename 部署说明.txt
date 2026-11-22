@@ -11,6 +11,7 @@ https://yingyin-box-site.pages.dev/
 - 项目名：yingyin-box-site
 - 生产分支：main
 - 官网是静态页面；只有一个 /api/contact 邮件函数，不接收视频、不保存 Key。
+- 官网与软件均支持右上角 `EN / 中文` 切换，选择保存在浏览器 localStorage，默认中文。
 - 不需要备案，免费额度够用。
 - Gitee Pages 已经下线，不要再按旧教程去 Gitee 开 Pages。
 

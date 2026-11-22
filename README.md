@@ -16,6 +16,12 @@ LICENSE                           MIT 许可证
 部署说明.txt                      部署与更新步骤
 ```
 
+## 界面语言
+
+官网和软件右上角都有 `EN / 中文` 切换按钮：官网整页文案、邮件弹窗和主视觉截图会一起切换；软件会切换界面标签、按钮、提示、弹窗和常见日志。语言选择保存在浏览器 `localStorage`（键名 `yingyin_ui_lang`），默认中文，不改变软件原有功能。
+
+English is available via the `EN / 中文` button in the top-right corner of both the website and the app. The choice is stored in `localStorage` (`yingyin_ui_lang`); Chinese remains the default.
+
 ## 当前部署
 
 - 平台：Cloudflare Pages（Direct Upload 直传）
