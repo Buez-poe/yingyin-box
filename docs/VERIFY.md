@@ -1,6 +1,6 @@
 # 校验与验签（三行命令）
 
-发布物：`downloads/yingyin-box-v6.0.zip`、`downloads/yingyin-box-v6.0.html`。校验和清单在站点根 `SHA256SUMS`，同目录有 `SHA256SUMS.sig`、`allowed_signers`、`signing-key.pub`。
+发布物：`downloads/yingyin-box-v6.0.zip`、`downloads/yingyin-box-v6.0.html`、站点根 `app.html`（在线版，内容与下载的 HTML 完全相同）。校验和清单在站点根 `SHA256SUMS`，同目录有 `SHA256SUMS.sig`、`allowed_signers`、`signing-key.pub`。
 
 ## 1. 校验哈希（Windows / macOS / Linux 通用）
 
@@ -34,9 +34,11 @@ cmd /c '"C:\Windows\System32\OpenSSH\ssh-keygen.exe" -Y verify -f allowed_signer
 
 ## 当前发布记录
 
-| 版本 | 日期 | commit | 完整包 SHA-256 | 网页版 SHA-256 |
+| 版本 | 日期 | commit | 完整包 SHA-256 | 网页版 / 在线版 SHA-256 |
 |---|---|---|---|---|
 | v6.0 | 2026-11-23 | `5ab422164c54` | `25a26e4744288f1c1c9fc85b04f8646567e9682a54adca4c6844714b65d8878d` | `c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611` |
 | v5.7 | 2026-11-22 | `b3f50aa` | `f9e0eaa97578e6447d29a9ba451b264d130b0eb7b4c457287356ff0e8ca364da` | `53765a727e724d083e4d8f3c09b611d4421ad5aea54e81748e7474abdde87f6d` |
 
 > 新版本只追加行，不覆盖旧哈希。上表是构建时快照，最终发布以 Release 附件 `SHA256SUMS` 为准。
+>
+> v6.0 的 `app.html` 与 `downloads/yingyin-box-v6.0.html` 字节完全相同，两者 SHA-256 均为 `c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611`。

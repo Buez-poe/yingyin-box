@@ -10,6 +10,7 @@ const i18nPath = path.join(src, "i18n.js");
 const outDir = path.join(root, "downloads");
 const version = "v6.0";
 const outPath = path.join(outDir, `yingyin-box-${version}.html`);
+const onlinePath = path.join(root, "app.html");
 
 function gitCommit() {
   if (process.env.BUILD_COMMIT) return process.env.BUILD_COMMIT.trim();
@@ -70,4 +71,5 @@ shell = shell.replace(
 );
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(outPath, shell, "utf8");
-console.log(JSON.stringify({ outPath, bytes: Buffer.byteLength(shell), commit, buildDate }, null, 2));
+fs.writeFileSync(onlinePath, shell, "utf8");
+console.log(JSON.stringify({ outPath, onlinePath, bytes: Buffer.byteLength(shell), commit, buildDate }, null, 2));

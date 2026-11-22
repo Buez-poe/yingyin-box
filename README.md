@@ -38,8 +38,8 @@ The app itself has **no business backend that receives videos, keys or OpenList 
 
 ## Quick start
 
-1. **Download** the web app or the full pack from [yingyin-box-site.pages.dev](https://yingyin-box-site.pages.dev/#download), or from [Releases](../../releases).
-2. **Open** `yingyin-box-v6.0.html` in Chrome or Edge. There is no install step.
+1. **Open** the online app at [yingyin-box-site.pages.dev/app.html](https://yingyin-box-site.pages.dev/app.html), or download the full pack from [Releases](../../releases) if you want an offline copy.
+2. **Run** it in Chrome or Edge. There is no install step.
 3. **Choose a source**: enter your OpenList URL and credentials, or use the local folder picker.
 4. **Set the media-library path**, for example `/media/tv` or `/media/movies`. This is the destination path inside the generated zip, not an upload address.
 5. **Optional:** import the `manifest.json` from your previous zip to diff against the last run.
@@ -59,13 +59,14 @@ BUILD_COMMIT=$(git rev-parse --short=12 HEAD) node tools/build.mjs .
 $env:BUILD_COMMIT=(git rev-parse --short=12 HEAD); node tools\build.mjs .
 ```
 
-The build injects the commit into the page footer and into `manifest.json`, then minifies with Terser and writes `downloads/yingyin-box-v6.0.html`. Run `build.ps1` or `build.sh` for the same result. The page prints `本版构建自 <commit>` and links to that commit; the same value is written into every generated `manifest.json`.
+The build injects the commit into the page footer and into `manifest.json`, then minifies with Terser and writes `downloads/yingyin-box-v6.0.html` and an identical online copy at `app.html`. Run `build.ps1` or `build.sh` for the same result. The page prints `本版构建自 <commit>` and links to that commit; the same value is written into every generated `manifest.json`.
 
 ## Downloads
 
 | Package | Size | SHA-256 |
 | --- | --- | --- |
 | Web app (`yingyin-box-v6.0.html`) | 196,090 bytes (191 KB) | `c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611` |
+| Online app (`app.html`) | identical bytes | `c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611` |
 | Full pack (`yingyin-box-v6.0.zip`) | 77,528 bytes (76 KB) | `25a26e4744288f1c1c9fc85b04f8646567e9682a54adca4c6844714b65d8878d` |
 
 The full pack contains the web app, a usage guide, four NFO examples, and `放这儿看我.txt`. Every generated zip also contains `manifest.json` and the same quick-start note.

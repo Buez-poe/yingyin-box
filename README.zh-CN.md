@@ -1,6 +1,6 @@
 # 影音入库箱 · 中文说明
 
-[English README](README.md) · 在线地址：**https://yingyin-box-site.pages.dev/**
+[English README](README.md) · 在线使用：**https://yingyin-box-site.pages.dev/app.html** · 官网：**https://yingyin-box-site.pages.dev/**
 
 纯静态官网 + 一个最小的 Cloudflare Pages Function（只处理邮件表单）。没有统计、没有第三方脚本。
 
@@ -14,6 +14,7 @@ src/i18n.js                       软件中英文词典
 tools/build.mjs                   可复现构建：注入 commit、压缩、拼单文件
 tools/make-shell.mjs              从旧版单文件抽壳
 build.ps1 / build.sh              构建入口
+app.html                          在线版入口（与 downloads 里的 HTML 字节相同）
 downloads/yingyin-box-v6.0.html   影音入库箱 v6.0 网页版
 downloads/yingyin-box-v6.0.zip    影音入库箱 v6.0 完整包（含使用说明、NFO 示例、manifest 规范）
 docs/VERIFY.md                    校验与验签命令

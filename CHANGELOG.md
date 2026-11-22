@@ -19,6 +19,7 @@
 - NFO now writes `<tmdbid>` when available, so a later re-scan does not fall back to filename guessing.
 - Batch zip also carries `manifest.json`.
 - Cover priority: local same-name image > TMDB > generated title cover.
+- Website primary CTA now opens the online app at `/app.html`; the full pack zip is a secondary offline/download option.
 
 ### Security
 
@@ -30,6 +31,7 @@
 ### Assets
 
 - `yingyin-box-v6.0.html` — 196,090 bytes — SHA-256 `c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611`
+- `app.html` (online copy) — 196,090 bytes — same SHA-256
 - `yingyin-box-v6.0.zip` — 77,528 bytes — SHA-256 `25a26e4744288f1c1c9fc85b04f8646567e9682a54adca4c6844714b65d8878d`
 
 ## v5.7 — 2026-11-22

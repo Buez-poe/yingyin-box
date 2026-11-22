@@ -172,6 +172,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
 .btn-outline-light{background:transparent;color:#eaf6f2;border-color:rgba(255,255,255,.32)}
 .btn-outline-light:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5)}
 .download-meta{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:17px;color:#8fb7ad;font-size:11px}
+.download-hint{margin:13px 0 0;color:#e8d9a8;font-size:12px;line-height:1.7;max-width:600px}
 .download-aside{position:relative;z-index:2;border-left:1px solid rgba(255,255,255,.14);padding-left:32px}
 .aside-title{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#9ee2cf;margin-bottom:14px}
 .checklist{list-style:none;margin:0;padding:0;display:grid;gap:9px;color:#d7eae4;font-size:12px}
@@ -328,9 +329,9 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
       <a href="#about">关于作者</a>
     </nav>
     <button class="lang-toggle" type="button" data-lang-toggle data-i18n-skip aria-label="Switch to English" title="Switch to English">EN</button>
-    <a class="nav-cta" href="#download">
-      <span>下载 v6.0</span>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M5 21h14"/></svg>
+    <a class="nav-cta" href="/app.html" target="_blank" rel="noopener">
+      <span>打开 v6.0</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
     </a>
   </div>
 </header>
@@ -343,9 +344,9 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
       <h1>影音入库箱<span class="sub">把云盘影音，整理成 Jellyfin / Emby 认得的样子。</span></h1>
       <p class="lede">选择视频目录，填好媒体库位置，点一下生成。播放文件、影片信息、海报和封面自动处理，最后打成一个 zip。</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#download">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M5 21h14"/></svg>
-          下载 v6.0 完整包
+        <a class="btn btn-primary" href="/app.html" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          打开在线版 v6.0
         </a>
         <a class="btn btn-ghost" href="#security">先看安全说明</a>
         <button class="btn btn-ghost" type="button" data-mail-open aria-haspopup="dialog" aria-controls="mail-dialog">
@@ -462,24 +463,25 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
   <section id="download" class="download-section container">
     <div class="download-card">
       <div>
-        <div class="kicker">下载</div>
+        <div class="kicker">使用</div>
         <h2>影音入库箱 v6.0</h2>
-        <p class="download-lede">单文件网页版，下载后双击打开。也可以直接在线打开，不需要安装任何东西。zip 内含 manifest.json，第二周加集后导入即可只生成变化。</p>
+        <p class="download-lede">不用下载：点一下就在浏览器里打开，和官网同一个网址，不需要安装任何东西。想离线保存、拿使用说明或 NFO 示例，再下载完整包。每个生成的 zip 内含 manifest.json，第二周加集后导入即可只生成变化。</p>
         <div class="download-actions">
-          <a class="btn btn-light" href="downloads/yingyin-box-v6.0.zip" download="影音入库箱 v6.0.zip">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M5 21h14"/></svg>
-            下载完整包 <span style="font-weight:500;opacity:.7">75 KB</span>
+          <a class="btn btn-light" href="/app.html" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+            打开在线版 v6.0
           </a>
-          <a class="btn btn-outline-light" href="downloads/yingyin-box-v6.0.html" target="_blank" rel="noopener">直接打开网页版</a>
+          <a class="btn btn-outline-light" href="downloads/yingyin-box-v6.0.zip" download="影音入库箱 v6.0.zip">下载完整包 <span style="font-weight:500;opacity:.7">75 KB</span></a>
         </div>
+        <p class="download-hint">提示：在线版页面是 https。如果你的 OpenList 是本地 http://127.0.0.1:5244 或内网 http://192.168.x.x，浏览器会按混合内容拦截，这种情况请用“下载完整包”里的本地文件打开。</p>
         <div class="download-meta">
-          <span>更新：2026-11-23</span><span>构建：<a href="https://gitee.com/a-splash-of-water/yingyin-box/commit/5ab422164c54" target="_blank" rel="noopener"><code>5ab422164c54</code></a></span>
+          <span>更新：2026-11-23</span><span>在线版 / 离线版：同一构建 <a href="https://gitee.com/a-splash-of-water/yingyin-box/commit/5ab422164c54" target="_blank" rel="noopener"><code>5ab422164c54</code></a></span>
         </div>
       </div>
       <div class="download-aside">
-        <div class="aside-title">包里有什么</div>
+        <div class="aside-title">完整包里有什么</div>
         <ul class="checklist">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>单文件网页版，双击即用</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>离线单文件，双击即用；在线版不用下载</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>使用说明（含常见故障排查）</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>4 个 NFO 示例，可直接对照</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>单集 NFO、海报、本地封面兜底</li>
@@ -492,7 +494,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
       <summary>技术验证信息（给懂技术的朋友）</summary>
       <div class="tech-body">
         <div>完整包 SHA-256：<code>25a26e4744288f1c1c9fc85b04f8646567e9682a54adca4c6844714b65d8878d</code></div>
-        <div>网页版 SHA-256：<code>c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611</code></div>
+        <div>在线版 <a href="/app.html" target="_blank" rel="noopener">/app.html</a> 与下载的 HTML 是同一文件，SHA-256：<code>c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611</code></div>
         <div>构建来源：<a href="https://gitee.com/a-splash-of-water/yingyin-box/commit/5ab422164c54" target="_blank" rel="noopener"><code>5ab422164c54</code></a> · 源码构建脚本 <code>tools/build.mjs</code> · 版本历史见 <a href="https://gitee.com/a-splash-of-water/yingyin-box/blob/master/CHANGELOG.md" target="_blank" rel="noopener">CHANGELOG</a> · 签名说明见 <a href="https://gitee.com/a-splash-of-water/yingyin-box/blob/master/docs/VERIFY.md" target="_blank" rel="noopener">VERIFY</a></div>
         <div>校验和文件：<a href="/SHA256SUMS" target="_blank" rel="noopener">/SHA256SUMS</a> · 许可证：MIT · 本页面不加载第三方脚本，不接统计工具。</div>
       </div>
@@ -959,6 +961,14 @@ const SITE_CONFIG = {
     "选择视频目录，填好媒体库位置，点一下生成。播放文件、影片信息、海报和封面自动处理，最后打成一个 zip。": "Choose a video folder, set the media library path, and hit Generate. Playback files, metadata, posters, and covers are handled automatically, then packed into a zip.",
     "下载 v6.0": "Download v6.0",
     "下载 v6.0 完整包": "Download v6.0 full pack",
+    "打开 v6.0": "Open v6.0",
+    "打开在线版 v6.0": "Open v6.0 online",
+    "使用": "Use",
+    "不用下载：点一下就在浏览器里打开，和官网同一个网址，不需要安装任何东西。想离线保存、拿使用说明或 NFO 示例，再下载完整包。每个生成的 zip 内含 manifest.json，第二周加集后导入即可只生成变化。": "No download needed: click once and it opens right in your browser, on this same site, with nothing to install. Download the full pack only if you want an offline copy, the usage guide, or the NFO examples. Every generated zip includes manifest.json, so next week you can import it and generate only changes.",
+    "完整包里有什么": "What's in the full pack",
+    "离线单文件，双击即用；在线版不用下载": "Offline single file, double-click to run; the online version needs no download",
+    "在线版 / 离线版：同一构建": "Online / offline: same build",
+    "提示：在线版页面是 https。如果你的 OpenList 是本地 http://127.0.0.1:5244 或内网 http://192.168.x.x，浏览器会按混合内容拦截，这种情况请用“下载完整包”里的本地文件打开。": "Note: the online app runs over https. If your OpenList is a local http://127.0.0.1:5244 or a LAN http://192.168.x.x address, the browser blocks it as mixed content; in that case open the local file from the full pack instead.",
     "先看安全说明": "Read safety notes",
     "邮箱联系": "Email the author",
     "不用安装 · 不用注册 · Windows / macOS / Linux 浏览器通用": "No install · No signup · Works in browsers on Windows / macOS / Linux",
