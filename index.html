@@ -90,7 +90,7 @@ button,a{ -webkit-tap-highlight-color:transparent }
 .lede{max-width:570px;margin:0;color:var(--muted);font-size:17px;line-height:1.85}
 .hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:28px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:0 20px;border-radius:11px;
-  border:1px solid transparent;font-weight:750;font-size:14px;line-height:1.2;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+  border:1px solid transparent;font-family:inherit;font-weight:750;font-size:14px;line-height:1.2;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
 .btn:hover{text-decoration:none;transform:translateY(-1px)}
 .btn-primary{background:var(--brand);color:#fff;box-shadow:0 10px 24px rgba(15,107,92,.2)}
 .btn-primary:hover{background:#0b5d50}
@@ -228,6 +228,32 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
 .footer-links a:hover{color:#fff}
 .legal{margin-top:30px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;color:#708f87;font-size:10.5px;line-height:1.7}
 .legal span{max-width:760px}
+.mail-open{overflow:hidden}
+.mail-dialog{width:min(580px,calc(100% - 32px));max-height:calc(100vh - 32px);margin:auto;padding:0;border:0;border-radius:20px;background:var(--paper);color:var(--ink);box-shadow:0 30px 80px rgba(10,30,28,.28);overflow:auto}
+.mail-dialog::backdrop{background:rgba(8,28,26,.48);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.mail-dialog[open]{animation:mailIn .18s ease-out}
+@keyframes mailIn{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
+.mail-form{padding:26px}
+.mail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.mail-head h3{margin:3px 0 0;font-size:24px;letter-spacing:-.03em}
+.mail-close{width:34px;height:34px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.mail-close:hover{color:var(--ink);border-color:#c5d6d2;background:var(--wash)}
+.mail-lede{margin:12px 0 18px;color:var(--muted);font-size:13px;line-height:1.75}
+.mail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mail-grid label{display:grid;gap:6px;font-size:12px;font-weight:650;color:var(--ink-2)}
+.mail-grid label em{font-style:normal;font-weight:500;color:var(--muted-2);margin-left:4px}
+.mail-grid label.full{grid-column:1/-1}
+.mail-grid input,.mail-grid textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:var(--wash);padding:11px 12px;color:var(--ink);font:inherit;font-size:13px;line-height:1.6;outline:none}
+.mail-grid input:focus,.mail-grid textarea:focus{border-color:var(--brand-2);box-shadow:0 0 0 3px rgba(22,134,116,.12);background:#fff}
+.mail-grid textarea{min-height:118px;resize:vertical}
+.mail-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:18px}
+.mail-actions .btn{min-height:42px;padding:0 15px;font-size:13px}
+.mail-note{min-height:18px;margin:12px 0 0;color:var(--brand);font-size:12px;line-height:1.55}
+.mail-note.err{color:var(--danger)}
+.mail-foot{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;margin-top:12px;padding-top:13px;border-top:1px solid var(--line-2);font-size:11.5px;color:var(--muted-2)}
+.mail-foot a{color:var(--brand);font-weight:650}
+.mail-linkbtn{border:0;background:none;padding:0;color:var(--brand);font:inherit;font-weight:650;cursor:pointer}
+.mail-linkbtn:hover{text-decoration:underline;text-underline-offset:3px}
 @media (max-width:980px){
   .hero{grid-template-columns:1fr;gap:34px;padding-top:52px}
   .hero h1{font-size:clamp(38px,7vw,58px)}
@@ -262,6 +288,11 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
   .footer-grid > :first-child{grid-column:1/-1}
   .legal{display:block}
   .legal span{display:block;margin-bottom:6px}
+  .mail-form{padding:21px}
+  .mail-grid{grid-template-columns:1fr}
+  .mail-actions .btn{width:100%}
+  .mail-actions{gap:8px}
+  .mail-dialog{width:calc(100% - 20px);max-height:calc(100vh - 20px)}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -308,10 +339,10 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
           下载 v5.7 完整包
         </a>
         <a class="btn btn-ghost" href="#security">先看安全说明</a>
-        <a class="btn btn-ghost" data-mail-link aria-label="通过邮箱联系作者" href="mailto:3037422104@qq.com">
+        <button class="btn btn-ghost" type="button" data-mail-open aria-haspopup="dialog" aria-controls="mail-dialog">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
           邮箱联系
-        </a>
+        </button>
       </div>
       <p class="hero-note">不用安装 · 不用注册 · Windows / macOS / Linux 浏览器通用</p>
       <div class="pills" aria-label="产品特点">
@@ -578,6 +609,35 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
   </div>
 </footer>
 
+<dialog class="mail-dialog" id="mail-dialog" aria-labelledby="mail-dialog-title">
+  <form class="mail-form" id="mail-form" novalidate>
+    <div class="mail-head">
+      <div>
+        <div class="kicker">联系作者</div>
+        <h3 id="mail-dialog-title">给作者发邮件</h3>
+      </div>
+      <button class="mail-close" type="button" data-mail-close aria-label="关闭邮件窗口">×</button>
+    </div>
+    <p class="mail-lede">网页本身没有后台，不会替你直接发送。填好后会打开你电脑或手机上的邮箱，确认内容再点发送。</p>
+    <div class="mail-grid">
+      <label>你的称呼<em>可选</em><input name="name" autocomplete="name" placeholder="怎么称呼你"></label>
+      <label>你的邮箱<em>可选</em><input name="reply" type="email" autocomplete="email" placeholder="方便作者回复你"></label>
+      <label class="full">想说的话<em>必填</em><textarea name="message" maxlength="1200" placeholder="例如：卡在哪一步、用的什么浏览器、有没有报错提示……"></textarea></label>
+    </div>
+    <div class="mail-actions">
+      <button class="btn btn-primary" type="submit">打开邮箱发送</button>
+      <button class="btn btn-ghost" type="button" data-mail-copy-body>复制内容</button>
+    </div>
+    <p class="mail-note" id="mail-note" role="status" aria-live="polite"></p>
+    <div class="mail-foot">
+      <button class="mail-linkbtn" type="button" data-mail-copy-address>复制收件地址</button>
+      <span>·</span>
+      <a data-mail-link href="mailto:3037422104@qq.com">直接打开邮箱</a>
+      <span>· 不用登录 Gitee</span>
+    </div>
+  </form>
+</dialog>
+
 <script>
 /* ===== 只改这一段：作者昵称 / 仓库地址 ===== */
 const SITE_CONFIG = {
@@ -629,14 +689,172 @@ const SITE_CONFIG = {
     else el.title = "仓库地址暂未配置";
   });
 
+  const mailEmail = String(cfg.email || "").trim();
+  const mailDialog = document.getElementById("mail-dialog");
+  const mailForm = document.getElementById("mail-form");
+  const mailNote = document.getElementById("mail-note");
+
+  function mailFields() {
+    const form = mailForm;
+    if (!form) return { name: "", reply: "", message: "" };
+    return {
+      name: String((form.querySelector('[name="name"]') || {}).value || "").trim(),
+      reply: String((form.querySelector('[name="reply"]') || {}).value || "").trim(),
+      message: String((form.querySelector('[name="message"]') || {}).value || "").trim()
+    };
+  }
+
+  function mailSubject() {
+    const name = mailFields().name;
+    return "影音入库箱反馈" + (name ? " - " + name : "");
+  }
+
+  function mailBody() {
+    const fields = mailFields();
+    const lines = [
+      "你好，我是" + (fields.name || "官网访客") + "。",
+      "",
+      fields.message,
+      "",
+      "---",
+      "来源：影音入库箱官网 " + location.origin + location.pathname
+    ];
+    if (fields.reply) lines.push("回复邮箱：" + fields.reply);
+    return lines.join("\n");
+  }
+
+  function mailHref(subject, body) {
+    return "mailto:" + mailEmail +
+      "?subject=" + encodeURIComponent(subject || "影音入库箱反馈") +
+      "&body=" + encodeURIComponent(body || "");
+  }
+
   document.querySelectorAll("[data-mail-link]").forEach(el => {
-    const email = String(cfg.email || "").trim();
-    if (email) {
-      el.href = "mailto:" + email + "?subject=" + encodeURIComponent("影音入库箱反馈");
+    if (mailEmail) {
+      el.href = mailHref("影音入库箱反馈", "");
       el.hidden = false;
     } else {
       el.hidden = true;
     }
+  });
+
+  function setNote(text, isError) {
+    if (!mailNote) return;
+    mailNote.textContent = text;
+    mailNote.className = "mail-note" + (isError ? " err" : "");
+  }
+
+  function openMailDialog() {
+    if (!mailDialog) return;
+    if (!mailEmail) {
+      setNote("邮箱入口暂未配置。", true);
+      return;
+    }
+    setNote("", false);
+    if (typeof mailDialog.showModal === "function") {
+      if (!mailDialog.open) mailDialog.showModal();
+    } else {
+      mailDialog.setAttribute("open", "");
+    }
+    document.body.classList.add("mail-open");
+    const message = mailForm && mailForm.querySelector('[name="message"]');
+    requestAnimationFrame(() => { if (message) message.focus(); });
+  }
+
+  function closeMailDialog() {
+    if (!mailDialog) return;
+    if (typeof mailDialog.close === "function" && mailDialog.open) mailDialog.close();
+    else mailDialog.removeAttribute("open");
+    document.body.classList.remove("mail-open");
+  }
+
+  document.querySelectorAll("[data-mail-open]").forEach(el => {
+    el.addEventListener("click", openMailDialog);
+  });
+  document.querySelectorAll("[data-mail-close]").forEach(el => {
+    el.addEventListener("click", closeMailDialog);
+  });
+  if (mailDialog) {
+    mailDialog.addEventListener("click", event => {
+      if (event.target === mailDialog) closeMailDialog();
+    });
+    mailDialog.addEventListener("close", () => {
+      document.body.classList.remove("mail-open");
+    });
+  }
+
+  function fallbackCopy(text) {
+    const area = document.createElement("textarea");
+    area.value = text;
+    area.setAttribute("readonly", "");
+    area.style.position = "fixed";
+    area.style.left = "-9999px";
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand("copy");
+    area.remove();
+  }
+
+  async function copyText(text, successText) {
+    if (!text) return;
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        fallbackCopy(text);
+      }
+      setNote(successText, false);
+    } catch (err) {
+      try {
+        fallbackCopy(text);
+        setNote(successText, false);
+      } catch (fallbackErr) {
+        setNote("复制失败，请手动选中内容复制。", true);
+      }
+    }
+  }
+
+  if (mailForm) {
+    mailForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const fields = mailFields();
+      if (!mailEmail) {
+        setNote("邮箱入口暂未配置。", true);
+        return;
+      }
+      if (!fields.message) {
+        setNote("先写一下要反馈的内容。", true);
+        const message = mailForm.querySelector('[name="message"]');
+        if (message) message.focus();
+        return;
+      }
+      setNote("正在打开你的邮箱客户端…", false);
+      window.location.href = mailHref(mailSubject(), mailBody());
+      setTimeout(closeMailDialog, 250);
+    });
+  }
+
+  document.querySelectorAll("[data-mail-copy-body]").forEach(el => {
+    el.addEventListener("click", () => {
+      const fields = mailFields();
+      if (!fields.message) {
+        setNote("先写一下要反馈的内容。", true);
+        const message = mailForm && mailForm.querySelector('[name="message"]');
+        if (message) message.focus();
+        return;
+      }
+      copyText("主题：" + mailSubject() + "\n\n" + mailBody(), "内容已复制，打开网页邮箱粘贴即可。");
+    });
+  });
+
+  document.querySelectorAll("[data-mail-copy-address]").forEach(el => {
+    el.addEventListener("click", () => {
+      if (!mailEmail) {
+        setNote("邮箱入口暂未配置。", true);
+        return;
+      }
+      copyText(mailEmail, "收件地址已复制，去网页邮箱粘贴到收件人即可。");
+    });
   });
 })();
 </script>
