@@ -203,6 +203,24 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
 .flow-branch{border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:11px;color:var(--muted);line-height:1.55;background:#fbfcfc}
 .flow-branch b{display:inline-block;color:var(--ink-2);font-size:10px;letter-spacing:.06em;margin-right:5px}
 .flow-no{margin-top:14px;border:1px dashed #e4b9b1;background:#fff7f5;color:#9f3d30;border-radius:10px;padding:10px 12px;font-size:12px;font-weight:750;text-align:center}
+/* trust anchor */
+.anchor-card{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px;scroll-margin-top:96px}
+.anchor-head{display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:24px;align-items:center}
+.anchor-head h3{margin:6px 0 8px;font-size:25px;line-height:1.35;color:var(--ink);letter-spacing:-.01em}
+.anchor-head p{margin:0;max-width:640px;color:var(--muted);font-size:13px;line-height:1.75}
+.anchor-seal{background:#f1faf6;border:1px solid #cfe4dd;border-radius:14px;padding:17px 14px;text-align:center;color:#1c5e53}
+.anchor-seal svg{width:28px;height:28px;color:var(--brand);margin-bottom:6px}
+.anchor-seal b{display:block;font-size:13px}
+.anchor-seal span{display:block;margin-top:3px;font-size:11px;color:#5d7f76}
+.anchor-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:22px}
+.anchor-step{padding-top:13px;border-top:2px solid #e7efec}
+.anchor-step:first-child{border-top-color:var(--brand)}
+.anchor-step b{display:block;font-size:12.5px;color:var(--ink-2);margin-bottom:4px}
+.anchor-step p{margin:0;font-size:11.5px;line-height:1.7;color:var(--muted)}
+.anchor-step em{font-style:normal;color:var(--ink-2);background:#f1f7f5;padding:0 3px;border-radius:4px}
+.anchor-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px}
+.anchor-actions .btn{font-size:12px;padding:9px 14px}
+.anchor-note{margin:14px 0 0;font-size:11px;line-height:1.7;color:var(--muted-2)}
 /* faq */
 .faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px;align-items:start}
 .faq{background:#fff;border:1px solid var(--line);border-radius:12px;padding:0 18px}
@@ -271,6 +289,8 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
   .download-aside{border-left:0;border-top:1px solid rgba(255,255,255,.14);padding-left:0;padding-top:22px}
   .security-grid{grid-template-columns:1fr}
   .flow-card{position:static}
+  .anchor-head{grid-template-columns:1fr}
+  .anchor-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:900px){
   .nav-links{display:none}
@@ -283,6 +303,9 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
   .container{width:calc(100% - 32px)}
   .section{padding:58px 0}
   .cards,.steps,.faq-grid{grid-template-columns:1fr}
+  .anchor-steps{grid-template-columns:1fr}
+  .anchor-card{padding:22px}
+  .anchor-actions .btn{width:100%}
   .trust-grid{grid-template-columns:repeat(2,1fr)}
   .trust-item{padding:15px 14px;font-size:12px;min-height:70px}
   .hero-actions .btn{width:100%}
@@ -325,6 +348,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
       <a href="#why">为什么放心</a>
       <a href="#how">怎么用</a>
       <a href="#security">安全说明</a>
+      <a href="#anchor">离线存档</a>
       <a href="#faq">常见问题</a>
       <a href="#about">关于作者</a>
     </nav>
@@ -565,6 +589,33 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
       <b>生成出的 strm：</b>只含 /d/ 路径模板与可选签名，不含账号密码 → 会写进 zip → 含 sign= / token= / pwd= 的包请勿外传。<br>
       <b>manifest.json：</b>含路径、标题、年份、TMDB ID、封面来源，不含凭据 → 随 zip 走 → 下次导入用于 diff。</p>
     </details>
+    <div class="anchor-card" id="anchor">
+      <div class="anchor-head">
+        <div>
+          <div class="kicker">信任锚</div>
+          <h3>别把这一页当证据：第一次验完，就把它带走。</h3>
+          <p>页面、CDN 和我的服务器都可能变。真正稳定的信任锚，是你第一次核对过的签名清单，加上存到本地的 HTML 和 zip。之后只开离线版，站点以后被改，也影响不到你。</p>
+        </div>
+        <div class="anchor-seal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-2.8 7.5-7 9-4.2-1.5-7-4.8-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+          <b>留档，不追新</b>
+          <span>本地副本才是你的</span>
+        </div>
+      </div>
+      <div class="anchor-steps">
+        <div class="anchor-step"><b>1. 第一次核对</b><p>先验证 SITE-SHA256SUMS.sig，再按清单核对 HTML 和 zip。页面上的数字不参与这一步。</p></div>
+        <div class="anchor-step"><b>2. 本地留档</b><p>把 HTML、zip、SHA256SUMS、签名和公钥放进同一个只读目录，记下核对日期与哈希。</p></div>
+        <div class="anchor-step"><b>3. 只走离线</b><p>以后直接打开本地 HTML；不从在线版取新代码，也不因为它更新就重下。</p></div>
+        <div class="anchor-step"><b>4. 仓库复核</b><p>去 Gitee 对照 SHA256SUMS、commit 历史和 downloads/ 成品。两个独立来源对上，才接近签名带来的可信度。</p></div>
+      </div>
+      <div class="anchor-actions">
+        <a class="btn btn-primary" href="downloads/yingyin-box-v6.0-offline-archive.zip" download="影音入库箱 v6.0 离线存档.zip">下载离线存档包</a>
+        <a class="btn btn-ghost" href="https://gitee.com/a-splash-of-water/yingyin-box/blob/master/SHA256SUMS" target="_blank" rel="noopener">仓库 SHA256SUMS</a>
+        <a class="btn btn-ghost" href="https://gitee.com/a-splash-of-water/yingyin-box/commits/master" target="_blank" rel="noopener">commit 历史</a>
+        <a class="btn btn-ghost" href="https://gitee.com/a-splash-of-water/yingyin-box/tree/master/downloads" target="_blank" rel="noopener">仓库 downloads/</a>
+      </div>
+      <p class="anchor-note">存档包只是把第一次核对要用的文件放在一起；真正作数的是签名、哈希和仓库里的同一份文件，不是按钮文字。</p>
+    </div>
   </section>
 
   <!-- ===== FAQ ===== -->
@@ -638,6 +689,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
         <h4>说明</h4>
         <div class="footer-links">
           <a href="#security">安全说明</a>
+          <a href="#anchor">离线存档</a>
           <a data-repo-link href="https://gitee.com/a-splash-of-water/yingyin-box" target="_blank" rel="noopener">代码公开</a>
           <a href="#about">关于作者</a>
         </div>
@@ -972,6 +1024,7 @@ const SITE_CONFIG = {
     "为什么放心": "Why it's safe",
     "怎么用": "How it works",
     "安全说明": "Safety",
+    "离线存档": "Offline archive",
     "常见问题": "FAQ",
     "关于作者": "About",
     "个人开发 · 本地运行 · 当前免费": "Indie built · Runs locally · Free for now",
@@ -988,6 +1041,24 @@ const SITE_CONFIG = {
     "在线版 / 离线版：同一构建": "Online / offline: same build",
     "整站已签名": "Whole site signed",
     "ed25519 公钥可验证": "Verifiable with the ed25519 public key",
+    "信任锚": "Trust anchor",
+    "别把这一页当证据：第一次验完，就把它带走。": "Don't treat this page as evidence. Verify once, then take it with you.",
+    "页面、CDN 和我的服务器都可能变。真正稳定的信任锚，是你第一次核对过的签名清单，加上存到本地的 HTML 和 zip。之后只开离线版，站点以后被改，也影响不到你。": "The page, the CDN and my server can all change. The stable trust anchor is the signed manifest you verified the first time, plus the HTML and zip saved on your own disk. After that, use only the offline copy; if the site changes later, it cannot affect you.",
+    "留档，不追新": "Archive, don't chase updates",
+    "本地副本才是你的": "The local copy is yours",
+    "1. 第一次核对": "1. Verify the first time",
+    "先验证 SITE-SHA256SUMS.sig，再按清单核对 HTML 和 zip。页面上的数字不参与这一步。": "Verify SITE-SHA256SUMS.sig first, then check the HTML and zip against the manifest. Numbers printed on this page play no part in this step.",
+    "2. 本地留档": "2. Archive locally",
+    "把 HTML、zip、SHA256SUMS、签名和公钥放进同一个只读目录，记下核对日期与哈希。": "Put the HTML, zip, SHA256SUMS, signature and public key in one read-only folder; note the verification date and hashes.",
+    "3. 只走离线": "3. Stay offline",
+    "以后直接打开本地 HTML；不从在线版取新代码，也不因为它更新就重下。": "From then on, open the local HTML directly. Do not fetch new code from the online version, and do not re-download just because it updates.",
+    "4. 仓库复核": "4. Cross-check the repo",
+    "去 Gitee 对照 SHA256SUMS、commit 历史和 downloads/ 成品。两个独立来源对上，才接近签名带来的可信度。": "On Gitee, compare SHA256SUMS, the commit history and the files under downloads/. When two independent sources agree, you get close to what a signature provides.",
+    "下载离线存档包": "Download the offline archive",
+    "仓库 SHA256SUMS": "Repo SHA256SUMS",
+    "commit 历史": "Commit history",
+    "仓库 downloads/": "Repo downloads/",
+    "存档包只是把第一次核对要用的文件放在一起；真正作数的是签名、哈希和仓库里的同一份文件，不是按钮文字。": "The archive just gathers the files needed for that first check. What actually counts is the signature, the hashes and the same files in the repo, not the label on a button.",
     "不接统计": "No analytics",
     "没有统计脚本和埋点": "No tracker scripts or telemetry",
     "离线可用": "Works offline",

@@ -28,6 +28,7 @@
 - Feedback form blocks pasted bearer tokens, JWT-like tokens, `key=`, `token=`, `password=`, and signed playback URLs.
 - Threat model documents source, storage, lifetime, access and deletion path for each credential.
 - Whole-site Ed25519 signature: `SITE-SHA256SUMS` covers every deployed page, doc, download and `SHA256SUMS`; `SITE-SHA256SUMS.sig` proves the manifest. See `docs/SITE-SIGNATURE.md`.
+- Trust anchor moved out of the page: `downloads/yingyin-box-v6.0-offline-archive.zip` packages the HTML, zip, manifest, signature, public key and verification docs in site layout for local archiving; after the first check, only the offline copy is used. Gitee `SHA256SUMS`, commit history and `downloads/` are documented as the second independent channel.
 
 ### Assets
 

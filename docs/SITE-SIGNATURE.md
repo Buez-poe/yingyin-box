@@ -12,14 +12,17 @@ SHA256:5HIRWZfB7RppTD0S8S1P6rwPof2FWwS2dykAWOO93xU
 SITE-SHA256SUMS.sig
   └─ 签名 SITE-SHA256SUMS
        ├─ index.html、app.html、README、LICENSE、CHANGELOG
-       ├─ docs/*.md、下载包、functions/api/contact.js
+       ├─ docs/*.md、下载包、离线存档包、functions/api/contact.js
        └─ SHA256SUMS（发布包清单）
             ├─ downloads/yingyin-box-v6.0.zip
+            ├─ downloads/yingyin-box-v6.0-offline-archive.zip
             ├─ downloads/yingyin-box-v6.0.html
             └─ app.html
 ```
 
-所以验一次整站签名，再按 `SHA256SUMS` 校验发布包，就能确认「官网页面、在线版、下载包」来自同一次发布。
+所以验一次整站签名，再按 `SHA256SUMS` 校验发布包，就能确认「官网页面、在线版、下载包、离线存档包」来自同一次发布。
+
+整站签名证明的是“此刻线上这一组文件没被换过”，它不会阻止站点明天发布另一组文件。第一次校验通过后，应按 [`VERIFY.md`](VERIFY.md) 把 HTML、zip、清单、签名和公钥留在本地并只使用离线副本；Gitee 仓库里的 `SHA256SUMS`、commit 历史和 `downloads/` 是第二独立渠道。
 
 ## 文件
 
@@ -71,7 +74,7 @@ Good "yingyin-box-SITE-SHA256SUMS" signature for a-splash-of-water with ED25519 
 
 ## 3. 发布包清单
 
-整站清单里包含 `SHA256SUMS`，它再列出 v6.0 的 zip、单文件 HTML 和在线版 `app.html`。发布包的验签步骤见 [`VERIFY.md`](VERIFY.md)，命名空间是 `yingyin-box-SHA256SUMS`。
+整站清单里包含 `SHA256SUMS`，它再列出 v6.0 的 zip、离线存档包、单文件 HTML 和在线版 `app.html`。发布包的验签步骤见 [`VERIFY.md`](VERIFY.md)，命名空间是 `yingyin-box-SHA256SUMS`。
 
 ## 说明
 

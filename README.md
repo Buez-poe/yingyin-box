@@ -69,11 +69,15 @@ The build injects the commit into the page footer and into `manifest.json`, then
 | Online app (`app.html`) | identical bytes | `c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611` |
 | Full pack (`yingyin-box-v6.0.zip`) | 77,528 bytes (76 KB) | `25a26e4744288f1c1c9fc85b04f8646567e9682a54adca4c6844714b65d8878d` |
 
+`downloads/yingyin-box-v6.0-offline-archive.zip` gathers the app, full pack, manifest, signature, public key and verification docs in site layout. Its size and SHA-256 are listed in the root `SHA256SUMS` rather than inside the archive, so the archive does not have to contain its own hash.
+
 The full pack contains the web app, a usage guide, four NFO examples, and `放这儿看我.txt`. Every generated zip also contains `manifest.json` and the same quick-start note.
 
 ## Integrity
 
 Release artifacts are covered by `SHA256SUMS` and its Ed25519 signature. The site itself is covered by a second manifest, `SITE-SHA256SUMS`, signed with namespace `yingyin-box-SITE-SHA256SUMS`; it includes every deployed page, doc, download and `SHA256SUMS`. Verification commands are in [`docs/SITE-SIGNATURE.md`](docs/SITE-SIGNATURE.md) and [`docs/VERIFY.md`](docs/VERIFY.md).
+
+The trust anchor is not this page: verify once, then keep the HTML, zip, manifest, signature and public key in a local read-only folder and use only that copy. The site can change later without affecting it. `downloads/yingyin-box-v6.0-offline-archive.zip` gathers those files in site layout. The Gitee repo is the second independent channel: compare `SHA256SUMS`, the commit history and the files under `downloads/` before trusting a page's claim.
 
 ## Bilingual UI
 
