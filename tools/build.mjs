@@ -62,11 +62,11 @@ const appMin = safe(minify(app));
 const i18nMin = safe(minify(i18n));
 shell = shell.replace(
   "<script>/*__APP_JS__*/</script>",
-  `<script>${appMin}</script>`,
+  () => `<script>${appMin}</script>`,
 );
 shell = shell.replace(
   "<script>/*__I18N_JS__*/</script>",
-  `<script>${i18nMin}</script>`,
+  () => `<script>${i18nMin}</script>`,
 );
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(outPath, shell, "utf8");
