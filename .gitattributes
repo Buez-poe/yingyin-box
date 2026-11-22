@@ -1,5 +1,7 @@
 SHA256SUMS text eol=lf
 SHA256SUMS.sig binary
+SITE-SHA256SUMS text eol=lf
+SITE-SHA256SUMS.sig binary
 allowed_signers text eol=lf
 signing-key.pub text eol=lf
 *.html text eol=lf
