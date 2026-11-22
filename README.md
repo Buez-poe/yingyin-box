@@ -44,7 +44,7 @@ npx wrangler pages deploy . --project-name yingyin-box-site --branch main
 ```js
 const SITE_CONFIG = {
   author: "影音入库箱作者",
-  email: "3037422104@qq.com",
+  email: "你的邮箱@example.com",
   giteeRepo: "https://gitee.com/a-splash-of-water/yingyin-box",
   githubRepo: ""
 };
