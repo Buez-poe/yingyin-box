@@ -27,6 +27,7 @@
 - The absolute sentence "no backend server" is replaced by "no business backend that receives videos, keys or OpenList credentials".
 - Feedback form blocks pasted bearer tokens, JWT-like tokens, `key=`, `token=`, `password=`, and signed playback URLs.
 - Threat model documents source, storage, lifetime, access and deletion path for each credential.
+- Whole-site Ed25519 signature: `SITE-SHA256SUMS` covers every deployed page, doc, download and `SHA256SUMS`; `SITE-SHA256SUMS.sig` proves the manifest. See `docs/SITE-SIGNATURE.md`.
 
 ### Assets
 

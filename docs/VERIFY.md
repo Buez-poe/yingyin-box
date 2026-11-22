@@ -2,6 +2,8 @@
 
 发布物：`downloads/yingyin-box-v6.0.zip`、`downloads/yingyin-box-v6.0.html`、站点根 `app.html`（在线版，内容与下载的 HTML 完全相同）。校验和清单在站点根 `SHA256SUMS`，同目录有 `SHA256SUMS.sig`、`allowed_signers`、`signing-key.pub`。
 
+整站页面、文档、下载包与 `SHA256SUMS` 本身还有一层整站签名，见 [`SITE-SIGNATURE.md`](SITE-SIGNATURE.md)（清单 `SITE-SHA256SUMS`，签名命名空间 `yingyin-box-SITE-SHA256SUMS`）。
+
 ## 1. 校验哈希（Windows / macOS / Linux 通用）
 
 ```bash

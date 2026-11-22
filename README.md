@@ -71,6 +71,10 @@ The build injects the commit into the page footer and into `manifest.json`, then
 
 The full pack contains the web app, a usage guide, four NFO examples, and `放这儿看我.txt`. Every generated zip also contains `manifest.json` and the same quick-start note.
 
+## Integrity
+
+Release artifacts are covered by `SHA256SUMS` and its Ed25519 signature. The site itself is covered by a second manifest, `SITE-SHA256SUMS`, signed with namespace `yingyin-box-SITE-SHA256SUMS`; it includes every deployed page, doc, download and `SHA256SUMS`. Verification commands are in [`docs/SITE-SIGNATURE.md`](docs/SITE-SIGNATURE.md) and [`docs/VERIFY.md`](docs/VERIFY.md).
+
 ## Bilingual UI
 
 The website and the app both have an `EN / 中文` switch in the top-right corner.

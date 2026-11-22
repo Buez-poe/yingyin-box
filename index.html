@@ -391,6 +391,10 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h7l2 3h9v9H3z"/><path d="M3 7V5h7l2 3"/></svg>
         <span>NAS 文件只读<small>OpenList 地址由你填</small></span>
       </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-2.8 7.5-7 9-4.2-1.5-7-4.8-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+        <span>整站已签名<small>ed25519 公钥可验证</small></span>
+      </div>
       <a class="trust-item" data-repo-link href="https://gitee.com/a-splash-of-water/yingyin-box" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 9l-3 3 3 3M16 9l3 3-3 3M13 6l-2 12"/></svg>
         <span>代码公开可查<small>懂技术的朋友可以看</small></span>
@@ -497,6 +501,8 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
         <div>在线版 <a href="/app.html" target="_blank" rel="noopener">/app.html</a> 与下载的 HTML 是同一文件，SHA-256：<code>c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611</code></div>
         <div>构建来源：<a href="https://gitee.com/a-splash-of-water/yingyin-box/commit/5ab422164c54" target="_blank" rel="noopener"><code>5ab422164c54</code></a> · 源码构建脚本 <code>tools/build.mjs</code> · 版本历史见 <a href="https://gitee.com/a-splash-of-water/yingyin-box/blob/master/CHANGELOG.md" target="_blank" rel="noopener">CHANGELOG</a> · 签名说明见 <a href="https://gitee.com/a-splash-of-water/yingyin-box/blob/master/docs/VERIFY.md" target="_blank" rel="noopener">VERIFY</a></div>
         <div>校验和文件：<a href="/SHA256SUMS" target="_blank" rel="noopener">/SHA256SUMS</a> · 许可证：MIT · 本页面不加载第三方脚本，不接统计工具。</div>
+        <div>整站清单：<a href="/SITE-SHA256SUMS" target="_blank" rel="noopener">/SITE-SHA256SUMS</a> · 整站签名：<a href="/SITE-SHA256SUMS.sig" target="_blank" rel="noopener">/SITE-SHA256SUMS.sig</a> · 公钥：<a href="/signing-key.pub" target="_blank" rel="noopener">/signing-key.pub</a> · 验签说明：<a href="/docs/SITE-SIGNATURE.md" target="_blank" rel="noopener">/docs/SITE-SIGNATURE.md</a></div>
+        <div>整站签名命名空间 <code>yingyin-box-SITE-SHA256SUMS</code> · 签名者 <code>a-splash-of-water</code> · 公钥指纹 <code>SHA256:5HIRWZfB7RppTD0S8S1P6rwPof2FWwS2dykAWOO93xU</code></div>
       </div>
     </details>
   </section>
@@ -968,6 +974,15 @@ const SITE_CONFIG = {
     "完整包里有什么": "What's in the full pack",
     "离线单文件，双击即用；在线版不用下载": "Offline single file, double-click to run; the online version needs no download",
     "在线版 / 离线版：同一构建": "Online / offline: same build",
+    "整站已签名": "Whole site signed",
+    "ed25519 公钥可验证": "Verifiable with the ed25519 public key",
+    "整站清单：": "Whole-site manifest: ",
+    "整站签名：": "Whole-site signature: ",
+    "公钥：": "Public key: ",
+    "验签说明：": "Verification guide: ",
+    "整站签名命名空间": "Whole-site signature namespace",
+    "· 签名者": "· signer",
+    "· 公钥指纹": "· key fingerprint",
     "提示：在线版页面是 https。如果你的 OpenList 是本地 http://127.0.0.1:5244 或内网 http://192.168.x.x，浏览器会按混合内容拦截，这种情况请用“下载完整包”里的本地文件打开。": "Note: the online app runs over https. If your OpenList is a local http://127.0.0.1:5244 or a LAN http://192.168.x.x address, the browser blocks it as mixed content; in that case open the local file from the full pack instead.",
     "先看安全说明": "Read safety notes",
     "邮箱联系": "Email the author",
