@@ -499,7 +499,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
     <div class="section-head">
       <div class="kicker">常见问题</div>
       <h2>小白最常问的几件事。</h2>
-      <p class="lede-2">如果下面没有你的问题，去代码仓库提 Issue（需要登录 Gitee）。</p>
+      <p class="lede-2">如果下面没有你的问题，去代码仓库提 Issue（需要登录 Gitee），或 <a data-mail-link href="mailto:3037422104@qq.com">发邮件给作者</a>。</p>
     </div>
     <div class="faq-grid">
       <details class="faq"><summary>会不会上传我的视频？</summary><p><b>不会。</b> 工具只读取目录和文件名，生成播放文件；视频本身不上传，也不经过作者的服务器。</p></details>
@@ -532,6 +532,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
         <div class="about-links">
           <a data-repo-link href="https://gitee.com/a-splash-of-water/yingyin-box" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 9l-3 3 3 3M16 9l3 3-3 3M13 6l-2 12"/></svg>代码与更新记录</a>
           <a href="https://gitee.com/a-splash-of-water/yingyin-box" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a4 4 0 01-4 4H8l-5 3V7a4 4 0 014-4h10a4 4 0 014 4z"/></svg>去仓库反馈</a>
+          <a data-mail-link href="mailto:3037422104@qq.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>邮件联系</a>
         </div>
       </div>
     </div>
@@ -577,6 +578,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
 /* ===== 只改这一段：作者昵称 / 仓库地址 ===== */
 const SITE_CONFIG = {
   author: "影音入库箱作者",       // 改成你的昵称
+  email: "3037422104@qq.com",      // 公开联系邮箱
   giteeRepo: "https://gitee.com/a-splash-of-water/yingyin-box", // 公开源码仓库
   githubRepo: ""                  // 可选，例如 "https://github.com/你的用户名/仓库"
 };
@@ -621,6 +623,16 @@ const SITE_CONFIG = {
       el.target = "_blank";
     }
     else el.title = "仓库地址暂未配置";
+  });
+
+  document.querySelectorAll("[data-mail-link]").forEach(el => {
+    const email = String(cfg.email || "").trim();
+    if (email) {
+      el.href = "mailto:" + email;
+      el.hidden = false;
+    } else {
+      el.hidden = true;
+    }
   });
 })();
 </script>
