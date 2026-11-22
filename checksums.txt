@@ -1,0 +1,4 @@
+SHA-256 checksums for v5.7
+
+53765a727e724d083e4d8f3c09b611d4421ad5aea54e81748e7474abdde87f6d  downloads/yingyin-box-v5.7.html
+f9e0eaa97578e6447d29a9ba451b264d130b0eb7b4c457287356ff0e8ca364da  downloads/yingyin-box-v5.7.zip

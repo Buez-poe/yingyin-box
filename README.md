@@ -1,101 +1,112 @@
-# 影音入库箱 · 官网
+# Yingyin Box
 
-在线地址：**https://yingyin-box-site.pages.dev/**
+**A local-first, single-file media-library ingester for OpenList → Jellyfin / Emby.**
 
-纯静态官网 + 一个最小的 Cloudflare Pages Function（只处理邮件表单）。没有统计、没有第三方脚本。
+Yingyin Box turns a cloud-drive folder into a clean, player-ready media library: `.strm` play files, Jellyfin/Emby-compatible NFO metadata, posters, season artwork, and renamed subtitles. It runs as one HTML file in your browser — no installer, no hosted account, and no author-side copy of your videos.
 
-## 文件结构
+[中文说明](README.zh-CN.md) · [Website](https://yingyin-box-site.pages.dev/) · [Releases](../../releases)
 
-```
-index.html                        官网首页（单文件，图片已内嵌）
-downloads/yingyin-box-v5.7.html   影音入库箱 v5.7 网页版
-downloads/yingyin-box-v5.7.zip    影音入库箱 v5.7 完整包
-functions/api/contact.js          /api/contact 邮件直发表单（Pages Function）
-README.md                         本说明
-LICENSE                           MIT 许可证
-部署说明.txt                      部署与更新步骤
-```
+![Yingyin Box web app in English](docs/screenshots/app-en.png)
 
-## 界面语言
+## What it does
 
-官网和软件右上角都有 `EN / 中文` 切换按钮：官网整页文案、邮件弹窗和主视觉截图会一起切换；软件会切换界面标签、按钮、提示、弹窗和常见日志。语言选择保存在浏览器 `localStorage`（键名 `yingyin_ui_lang`），默认中文，不改变软件原有功能。
+- **Scan a source folder** through OpenList, or pick a local folder in a Chromium-based browser.
+- **Generate `.strm` files** with the correct episode structure for Jellyfin and Emby.
+- **Write NFO metadata** for shows, seasons, episodes and movies.
+- **Fetch optional TMDB metadata** — overview, rating, cast, official posters and backdrops. A TMDB key is not required.
+- **Create a local fallback cover** when no poster is available, so the library never shows a blank tile.
+- **Rename subtitles** to match the video, or keep the original file name.
+- **Package or upload** the result: download a zip, or write directly into your media-library folder.
+- **Switch the UI** between English and Chinese from the top-right corner. Chinese remains the default.
 
-English is available via the `EN / 中文` button in the top-right corner of both the website and the app. The choice is stored in `localStorage` (`yingyin_ui_lang`); Chinese remains the default.
+![Advanced settings in English](docs/screenshots/app-advanced-en.png)
 
-## 当前部署
+## Why local-first
 
-- 平台：Cloudflare Pages（Direct Upload 直传）
-- 项目名：`yingyin-box-site`
-- 生产分支：`main`
-- 在线域名：`https://yingyin-box-site.pages.dev/`
-- 无需备案，免费额度足够这个静态站使用。
+| Data | Where it goes |
+| --- | --- |
+| Video files | Stay on your computer or NAS. The app reads folder names and file names only; it never uploads the video. |
+| OpenList credentials | Used in page memory for the current session; not written to the config file. |
+| TMDB API key / token | Stored in this browser's `localStorage`; config export strips it. |
+| Media library output | Written to the folder you choose, or delivered as a zip. |
+| Analytics / ads | None. The app page loads no third-party scripts and has no telemetry. |
 
-> Gitee Pages 已于 2024 年下线，不能再作为网页托管；本仓库只保留源码和官网文件。
+The app itself has **no hosted backend**. The project website has one small server endpoint for its contact form; it never receives media files, OpenList passwords or TMDB keys.
 
-## 更新线上站点
+## Quick start
 
-在项目根目录执行：
+1. **Download** the web app or the full pack from [yingyin-box-site.pages.dev](https://yingyin-box-site.pages.dev/#download), or from [Releases](../../releases).
+2. **Open** `yingyin-box-v5.7.html` in Chrome or Edge. There is no install step.
+3. **Choose a source**: enter your OpenList URL and credentials, or use the local folder picker.
+4. **Set the media-library path**, for example `/media/tv` or `/media/movies`. This is the destination path inside the generated zip, not an upload address.
+5. **Optional:** add a TMDB v3 API key or v4 access token for richer metadata and official artwork.
+6. **Generate** and unzip the result into your Jellyfin/Emby library.
 
-```powershell
-.\更新官网.ps1
-```
+If your browser cannot write directly to a local folder, the app falls back to a zip download. The generated folder structure still works the same way.
 
-它会同步静态文件、复制 `functions/`、推送 Gitee，并用 Wrangler 部署到 Cloudflare Pages。也可以在本目录执行：
+## Downloads
 
-```powershell
-npx wrangler pages deploy . --project-name yingyin-box-site --branch main
-```
+| Package | Size | SHA-256 |
+| --- | --- | --- |
+| Web app (`yingyin-box-v5.7.html`) | 175,814 bytes (172 KB) | `53765a727e724d083e4d8f3c09b611d4421ad5aea54e81748e7474abdde87f6d` |
+| Full pack (`yingyin-box-v5.7.zip`) | 66,671 bytes (65 KB) | `f9e0eaa97578e6447d29a9ba451b264d130b0eb7b4c457287356ff0e8ca364da` |
 
-需要先在本机配置 Cloudflare 的 `CLOUDFLARE_API_TOKEN` 和 `CLOUDFLARE_ACCOUNT_ID`，Token 只放在本机环境变量或临时文件里，不要提交到仓库。
+The full pack contains the web app, a usage guide, and four NFO examples.
 
-> 邮件直发表单依赖 `functions/`，必须用 Wrangler 部署；Cloudflare 控制台的“拖拽上传”不会编译 Functions。
+## Bilingual UI
 
-## 邮件直发表单
+The website and the app both have an `EN / 中文` switch in the top-right corner.
 
-`functions/api/contact.js` 是 Cloudflare Pages Function，负责接收弹窗表单并调用 Resend 发信。Cloudflare Pages 项目需要两个 Secret：
+- The website switches its full page: hero, navigation, download section, security notes, FAQ, contact dialog and hero screenshot.
+- The app switches labels, buttons, select options, dialogs, hints and common runtime messages.
+- The choice is stored in `localStorage` under `yingyin_ui_lang`; Chinese is the default.
+- The app's existing **metadata language** selector is separate: it controls the language of generated NFO metadata, not the UI.
 
-- `CONTACT_TO`：收件邮箱，不写进网页源码。
-- `RESEND_API_KEY`：Resend 的发送权限 API Key，只存在 Cloudflare Secret。
+![Website in English](docs/screenshots/website-en.png)
 
-可选：
+## Requirements
 
-- `CONTACT_FROM`：默认 `影音入库箱官网 <onboarding@resend.dev>`；绑定自己的域名后可以换成自己的发信地址。
+- **Browser:** Chrome or Edge on desktop is recommended. Safari/Firefox can still generate a zip when direct folder writing is unavailable.
+- **Source:** an OpenList instance, or a local folder.
+- **Library:** Jellyfin or Emby, if you want to consume the generated `.strm` + NFO structure.
+- **Metadata (optional):** a TMDB API key or access token.
 
-设置 Secret：
+## Security notes
 
-```powershell
-npx wrangler pages secret put CONTACT_TO --project-name yingyin-box-site
-npx wrangler pages secret put RESEND_API_KEY --project-name yingyin-box-site
-```
+This is a single-file tool that you can read before running. A few practical precautions:
 
-不要把 API Key 写进 `index.html`、README、仓库或聊天记录。缺少 `RESEND_API_KEY` 时，接口会返回 503，页面会提示改用“直接打开邮箱”或“复制内容”。
+- Download only from this repository, the official website, or the release attachments.
+- Some browsers show a conservative warning for downloaded HTML files. That warning is not a virus verdict; inspect the source, scan the file, or try it in a separate browser profile.
+- Do not enter API keys on a shared computer. Keys are stored in that browser profile's `localStorage`; use **Clear TMDB key** when finished.
+- Use HTTPS for your OpenList endpoint when it is exposed outside your LAN.
+- Treat the generated media-library path as a write permission: point it at a test folder first.
 
-## 改作者信息
+## FAQ
 
-打开 `index.html`，拉到最底部，找到：
+**Does it upload my videos?** No. It reads directory and file names and generates play files/metadata. The video bytes stay on your storage.
 
-```js
-const SITE_CONFIG = {
-  author: "影音入库箱作者",
-  emailB64: "你的邮箱的Base64",
-  giteeRepo: "https://gitee.com/a-splash-of-water/yingyin-box",
-  githubRepo: ""
-};
-```
+**Can I use it without a TMDB key?** Yes. You get basic NFO metadata and a local title cover. A key adds overviews, ratings, cast and official artwork.
 
-- `author`：作者昵称，“关于作者”会同步显示。
-- `emailB64`：联系邮箱的 Base64，避免源码出现明文；首屏“邮箱联系”会打开站内写信窗口，常见问题和“关于作者”里保留直接打开邮箱的入口。页面正文不显示邮箱地址。
-- `giteeRepo` / `githubRepo`：源码仓库地址。
+**Does it save my NAS password?** The OpenList password is used in page memory for the current session and is not written to the config file.
 
-## 更新版本
+**Is this affiliated with TMDB, Jellyfin, Emby or OpenList?** No. These names are used only to describe compatibility. This is an independent personal project.
 
-1. 替换 `downloads/` 里的网页版和 zip。
-2. 在 `index.html` 里搜索并替换：版本号 `v5.7`、日期 `2026-11-22`、文件大小 `53 KB` / `140 KB`。
-3. 在“技术验证信息”里更新两个 SHA-256。
-4. 在项目根目录运行 `.\更新官网.ps1`。
+**Why does my browser warn about the HTML file?** Single-file HTML downloads often trigger a generic warning. Review the source and scan the file; the project has no installer and no bundled binaries.
 
-## 说明
+## Contributing
 
-- 本产品使用 TMDB API，但未获得 TMDB 认可或认证。
-- Jellyfin、Emby、OpenList 为各自商标，本文仅说明兼容性，不代表官方合作。
-- 本站不接入统计工具。
+Issues and pull requests are welcome in English or Chinese.
+
+- Keep the app a **single, reviewable HTML file** unless there is a strong reason to split it.
+- Do not add analytics, ads, tracking pixels or hidden network calls.
+- Never commit API keys, tokens, passwords, `.env` files or Cloudflare secrets.
+- Test both Chinese and English UI, and check that existing generation behavior is unchanged.
+- For security reports, use GitHub's private security advisory rather than a public issue.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
+
+---
+
+**Keywords:** OpenList, Jellyfin, Emby, media library, `.strm`, NFO, metadata, posters, subtitles, self-hosted, local-first, single-file web app, bilingual UI.
