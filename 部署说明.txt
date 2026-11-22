@@ -47,7 +47,6 @@ LICENSE                           MIT 许可证
 ----------
 打开 index.html，拉到最底部，找到 SITE_CONFIG：
   author      作者昵称
-  email       想公开的邮箱，留空就不显示
   giteeRepo   源码仓库地址
 
 改完保存，再按上面的方法重新部署一次。

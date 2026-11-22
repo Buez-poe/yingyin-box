@@ -44,14 +44,12 @@ npx wrangler pages deploy . --project-name yingyin-box-site --branch main
 ```js
 const SITE_CONFIG = {
   author: "影音入库箱作者",
-  email: "",
   giteeRepo: "https://gitee.com/a-splash-of-water/yingyin-box",
   githubRepo: ""
 };
 ```
 
 - `author`：作者昵称，“关于作者”会同步显示。
-- `email`：想公开联系邮箱就填；留空则只显示仓库反馈入口。
 - `giteeRepo` / `githubRepo`：源码仓库地址。
 
 ## 更新版本
