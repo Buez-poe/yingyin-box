@@ -795,22 +795,13 @@ const SITE_CONFIG = {
     area.remove();
   }
 
-  async function copyText(text, successText) {
+  function copyText(text, successText) {
     if (!text) return;
     try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-      } else {
-        fallbackCopy(text);
-      }
+      fallbackCopy(text);
       setNote(successText, false);
     } catch (err) {
-      try {
-        fallbackCopy(text);
-        setNote(successText, false);
-      } catch (fallbackErr) {
-        setNote("复制失败，请手动选中内容复制。", true);
-      }
+      setNote("复制失败，请手动选中内容复制。", true);
     }
   }
 
