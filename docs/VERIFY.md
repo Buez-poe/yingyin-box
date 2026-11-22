@@ -14,8 +14,16 @@ Get-Content .\SHA256SUMS | ForEach-Object { $p=($_ -split '  ',2)[1]; $h=($_ -sp
 
 ## 2. 验签（SSH ed25519，Windows 自带 OpenSSH 即可）
 
+macOS / Linux：
+
 ```bash
 ssh-keygen -Y verify -f allowed_signers -I a-splash-of-water -n yingyin-box-SHA256SUMS -s SHA256SUMS.sig < SHA256SUMS
+```
+
+Windows PowerShell（用 cmd 做字节重定向，避免 PowerShell 管道改写换行）：
+
+```powershell
+cmd /c '"C:\Windows\System32\OpenSSH\ssh-keygen.exe" -Y verify -f allowed_signers -I a-splash-of-water -n yingyin-box-SHA256SUMS -s SHA256SUMS.sig < SHA256SUMS'
 ```
 
 输出 `Good "yingyin-box-SHA256SUMS" signature for a-splash-of-water` 即通过。
@@ -28,7 +36,7 @@ ssh-keygen -Y verify -f allowed_signers -I a-splash-of-water -n yingyin-box-SHA2
 
 | 版本 | 日期 | commit | 完整包 SHA-256 | 网页版 SHA-256 |
 |---|---|---|---|---|
-| v6.0 | 2026-11-23 | `b3f50aa525a1` | `16f679dbc3b619cccd4a5c34db308fa849721ec699be637b42158c5a9d1e5c45` | `ef728e5fa84d58a56422e5f42e7792585f5b645f828b784cba41a28790ef6053` |
+| v6.0 | 2026-11-23 | `5ab422164c54` | `25a26e4744288f1c1c9fc85b04f8646567e9682a54adca4c6844714b65d8878d` | `c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611` |
 | v5.7 | 2026-11-22 | `b3f50aa` | `f9e0eaa97578e6447d29a9ba451b264d130b0eb7b4c457287356ff0e8ca364da` | `53765a727e724d083e4d8f3c09b611d4421ad5aea54e81748e7474abdde87f6d` |
 
 > 新版本只追加行，不覆盖旧哈希。上表是构建时快照，最终发布以 Release 附件 `SHA256SUMS` 为准。

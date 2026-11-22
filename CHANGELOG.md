@@ -29,8 +29,8 @@
 
 ### Assets
 
-- `yingyin-box-v6.0.html` — 190,426 bytes — SHA-256 `ef728e5fa84d58a56422e5f42e7792585f5b645f828b784cba41a28790ef6053`
-- `yingyin-box-v6.0.zip` — 74,967 bytes — SHA-256 `16f679dbc3b619cccd4a5c34db308fa849721ec699be637b42158c5a9d1e5c45`
+- `yingyin-box-v6.0.html` — 196,090 bytes — SHA-256 `c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611`
+- `yingyin-box-v6.0.zip` — 77,528 bytes — SHA-256 `25a26e4744288f1c1c9fc85b04f8646567e9682a54adca4c6844714b65d8878d`
 
 ## v5.7 — 2026-11-22
 

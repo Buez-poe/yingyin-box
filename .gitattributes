@@ -1,0 +1,10 @@
+SHA256SUMS text eol=lf
+SHA256SUMS.sig binary
+allowed_signers text eol=lf
+signing-key.pub text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.mjs text eol=lf
+*.js text eol=lf
+*.ps1 text eol=crlf
+*.sh text eol=lf

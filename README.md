@@ -65,10 +65,10 @@ The build injects the commit into the page footer and into `manifest.json`, then
 
 | Package | Size | SHA-256 |
 | --- | --- | --- |
-| Web app (`yingyin-box-v5.7.html`) | 175,814 bytes (172 KB) | `53765a727e724d083e4d8f3c09b611d4421ad5aea54e81748e7474abdde87f6d` |
-| Full pack (`yingyin-box-v5.7.zip`) | 66,671 bytes (65 KB) | `f9e0eaa97578e6447d29a9ba451b264d130b0eb7b4c457287356ff0e8ca364da` |
+| Web app (`yingyin-box-v6.0.html`) | 196,090 bytes (191 KB) | `c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611` |
+| Full pack (`yingyin-box-v6.0.zip`) | 77,528 bytes (76 KB) | `25a26e4744288f1c1c9fc85b04f8646567e9682a54adca4c6844714b65d8878d` |
 
-The full pack contains the web app, a usage guide, and four NFO examples.
+The full pack contains the web app, a usage guide, four NFO examples, and `放这儿看我.txt`. Every generated zip also contains `manifest.json` and the same quick-start note.
 
 ## Bilingual UI
 
@@ -97,6 +97,17 @@ This is a single-file tool that you can read before running. A few practical pre
 - Do not enter API keys on a shared computer. Keys are stored in that browser profile's `localStorage`; use **Clear TMDB key** when finished.
 - Use HTTPS for your OpenList endpoint when it is exposed outside your LAN.
 - Treat the generated media-library path as a write permission: point it at a test folder first.
+
+## Verify a download
+
+`SHA256SUMS`, `SHA256SUMS.sig`, `allowed_signers` and `signing-key.pub` ship with every release. Full commands are in [`docs/VERIFY.md`](docs/VERIFY.md). Short version:
+
+```bash
+sha256sum -c SHA256SUMS
+ssh-keygen -Y verify -f allowed_signers -I a-splash-of-water -n yingyin-box-SHA256SUMS -s SHA256SUMS.sig < SHA256SUMS
+```
+
+The page footer prints the commit it was built from; the same commit is written into every generated `manifest.json`. A downloaded HTML keeps working offline and never calls back.
 
 ## FAQ
 
