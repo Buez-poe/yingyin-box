@@ -2,7 +2,7 @@
 
 **A local-first, single-file media-library ingester for OpenList → Jellyfin / Emby.**
 
-Yingyin Box turns a cloud-drive folder into a clean, player-ready media library: `.strm` play files, Jellyfin/Emby-compatible NFO metadata, posters, season artwork, and renamed subtitles. It runs as one HTML file in your browser — no installer, no hosted account, and no author-side copy of your videos.
+Yingyin Box turns a cloud-drive folder into a clean, player-ready media library: `.strm` play files, Jellyfin/Emby-compatible NFO metadata, posters, season artwork, and renamed subtitles. It runs as one HTML file in your browser — no installer, no hosted account, and no author-side copy of your videos. v6.0 adds a `manifest.json` inside every zip so the next week's re-run can diff and generate only what changed.
 
 [中文说明](README.zh-CN.md) · [Website](https://yingyin-box-site.pages.dev/) · [Releases](../../releases)
 
@@ -17,6 +17,9 @@ Yingyin Box turns a cloud-drive folder into a clean, player-ready media library:
 - **Create a local fallback cover** when no poster is available, so the library never shows a blank tile.
 - **Rename subtitles** to match the video, or keep the original file name.
 - **Package or upload** the result: download a zip, or write directly into your media-library folder.
+- **Re-run without rebuilding the whole library:** every zip contains `manifest.json`; import it next time to generate only new or changed entries.
+- **Never overwrite by default:** local `poster.jpg`, hand-edited NFO and existing artwork are skipped unless you explicitly enable overwrite.
+- **Carry state with the library:** the manifest travels with the unzipped folder, so clearing browser storage or changing computers does not lose the diff baseline.
 - **Switch the UI** between English and Chinese from the top-right corner. Chinese remains the default.
 
 ![Advanced settings in English](docs/screenshots/app-advanced-en.png)
@@ -31,18 +34,32 @@ Yingyin Box turns a cloud-drive folder into a clean, player-ready media library:
 | Media library output | Written to the folder you choose, or delivered as a zip. |
 | Analytics / ads | None. The app page loads no third-party scripts and has no telemetry. |
 
-The app itself has **no hosted backend**. The project website has one small server endpoint for its contact form; it never receives media files, OpenList passwords or TMDB keys.
+The app itself has **no business backend that receives videos, keys or OpenList credentials**. The project website has one small server endpoint for its contact form; it receives only a name and message, never media files, OpenList passwords or TMDB keys.
 
 ## Quick start
 
 1. **Download** the web app or the full pack from [yingyin-box-site.pages.dev](https://yingyin-box-site.pages.dev/#download), or from [Releases](../../releases).
-2. **Open** `yingyin-box-v5.7.html` in Chrome or Edge. There is no install step.
+2. **Open** `yingyin-box-v6.0.html` in Chrome or Edge. There is no install step.
 3. **Choose a source**: enter your OpenList URL and credentials, or use the local folder picker.
 4. **Set the media-library path**, for example `/media/tv` or `/media/movies`. This is the destination path inside the generated zip, not an upload address.
-5. **Optional:** add a TMDB v3 API key or v4 access token for richer metadata and official artwork.
-6. **Generate** and unzip the result into your Jellyfin/Emby library.
+5. **Optional:** import the `manifest.json` from your previous zip to diff against the last run.
+6. **Optional:** add a TMDB v3 API key or v4 access token for richer metadata and official artwork.
+7. **Generate** and unzip the result into your Jellyfin/Emby library. The zip contains `manifest.json` at its root.
 
 If your browser cannot write directly to a local folder, the app falls back to a zip download. The generated folder structure still works the same way.
+
+## Reproducible build
+
+Source lives in `src/` (`shell.html`, `app.js`, `i18n.js`). The shipped single-file HTML is produced by `tools/build.mjs`:
+
+```bash
+# macOS / Linux
+BUILD_COMMIT=$(git rev-parse --short=12 HEAD) node tools/build.mjs .
+# Windows PowerShell
+$env:BUILD_COMMIT=(git rev-parse --short=12 HEAD); node tools\build.mjs .
+```
+
+The build injects the commit into the page footer and into `manifest.json`, then minifies with Terser and writes `downloads/yingyin-box-v6.0.html`. Run `build.ps1` or `build.sh` for the same result. The page prints `本版构建自 <commit>` and links to that commit; the same value is written into every generated `manifest.json`.
 
 ## Downloads
 

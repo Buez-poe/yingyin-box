@@ -1,5 +1,37 @@
 # Changelog
 
+## v6.0 — 2026-11-23
+
+### Added
+
+- `manifest.json` inside every zip: version, commit, build date, OpenList base, output root, per-entry relative path, source size/mtime, title/year/season/episode, tmdbid, URL template, cover source.
+- Import a previous manifest and diff: new entries generated, changed entries rewritten, unchanged skipped, missing entries listed but not deleted by default.
+- Default "only add, never overwrite": existing local `poster.jpg`, hand-edited NFO and artwork are skipped; overwrite requires an explicit switch plus confirmation.
+- Preflight report before generation: missing year, auto-numbering, duplicate episodes, suspicious characters, entries that would be skipped or rewritten.
+- Browser capability badge on first screen: direct folder write / zip fallback / zip only.
+- Session-only TMDB key mode; "clear all local data"; exported config header states version, commit and "no credentials".
+- strm URL templates with `openlistBase` replacement; warning and optional stripping for `sign=` / `token=` / `pwd=`.
+- Footer trust block: author, repository, feedback, checksums, MIT license, changelog, threat model, manifest spec, offline-freeze promise, TMDB notice.
+- Repro-build pipeline: `src/` + `tools/build.mjs` + `build.ps1` / `build.sh`; commit injected into page footer and manifest.
+
+### Changed
+
+- NFO now writes `<tmdbid>` when available, so a later re-scan does not fall back to filename guessing.
+- Batch zip also carries `manifest.json`.
+- Cover priority: local same-name image > TMDB > generated title cover.
+
+### Security
+
+- Website and app ship a CSP with `default-src 'self'`, `object-src 'none'`, `base-uri 'none'`, `form-action 'none'`.
+- The absolute sentence "no backend server" is replaced by "no business backend that receives videos, keys or OpenList credentials".
+- Feedback form blocks pasted bearer tokens, JWT-like tokens, `key=`, `token=`, `password=`, and signed playback URLs.
+- Threat model documents source, storage, lifetime, access and deletion path for each credential.
+
+### Assets
+
+- `yingyin-box-v6.0.html` — 190,426 bytes — SHA-256 `ef728e5fa84d58a56422e5f42e7792585f5b645f828b784cba41a28790ef6053`
+- `yingyin-box-v6.0.zip` — 74,967 bytes — SHA-256 `16f679dbc3b619cccd4a5c34db308fa849721ec699be637b42158c5a9d1e5c45`
+
 ## v5.7 — 2026-11-22
 
 ### Added

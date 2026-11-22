@@ -8,14 +8,32 @@
 
 ```
 index.html                        官网首页（单文件，图片已内嵌）
-downloads/yingyin-box-v5.7.html   影音入库箱 v5.7 网页版
-downloads/yingyin-box-v5.7.zip    影音入库箱 v5.7 完整包
-functions/api/contact.js          /api/contact 邮件直发表单（Pages Function）
+src/shell.html                    软件 HTML 外壳
+src/app.js                        软件主逻辑（未压缩）
+src/i18n.js                       软件中英文词典
+tools/build.mjs                   可复现构建：注入 commit、压缩、拼单文件
+tools/make-shell.mjs              从旧版单文件抽壳
+build.ps1 / build.sh              构建入口
+downloads/yingyin-box-v6.0.html   影音入库箱 v6.0 网页版
+downloads/yingyin-box-v6.0.zip    影音入库箱 v6.0 完整包（含使用说明、NFO 示例、manifest 规范）
+docs/VERIFY.md                    校验与验签命令
+docs/THREAT-MODEL.md              威胁模型一页纸
+docs/MANIFEST.md                  manifest.json 规范
+functions/api/contact.js          /api/contact 反馈转发（Pages Function）
 README.md                         English README
 README.zh-CN.md                   本说明（中文）
-LICENSE                           MIT 许可证
-部署说明.txt                      部署与更新步骤
+LICENSE                           MIT 许可证，版权人 a-splash-of-water
 ```
+
+## v6.0 的核心变化
+
+- 每个 zip 里带 `manifest.json`：记录 version / commit / openlistBase / 条目路径 / 源文件 mtime、size / 标题 / 年份 / 季集 / tmdbid / URL 模板 / 封面来源；不含 Key、密码。
+- 下次导入上次 manifest，工具只生成新增和变化条目；未变化跳过，manifest 里有但本次没找到的只列出、默认不删。
+- 默认「只新增、不覆盖」：本地 poster.jpg、手写 NFO 不被覆盖；覆盖需要显式开关 + 二次确认。
+- strm 写路径模板，不写当时签发的裸直链；换 `openlistBase` 重跑即可复活旧库。
+- 页面角落显示「本版构建自 <commit>」，可点击跳到仓库 commit；同一 commit 也写进 manifest。
+- 已下载的离线 HTML 永久可用、永不回连、永不因版本更新失效；若未来增加付费服务，已发布版本功能不锁。
+
 
 ## 界面语言
 
@@ -77,7 +95,7 @@ npx wrangler pages secret put RESEND_API_KEY --project-name yingyin-box-site
 
 ```js
 const SITE_CONFIG = {
-  author: "影音入库箱作者",
+  author: "a-splash-of-water",
   emailB64: "你的邮箱的Base64",
   giteeRepo: "https://gitee.com/a-splash-of-water/yingyin-box",
   githubRepo: ""
@@ -90,10 +108,13 @@ const SITE_CONFIG = {
 
 ## 更新版本
 
-1. 替换 `downloads/` 里的网页版和 zip。
-2. 在 `index.html` 里搜索并替换：版本号 `v5.7`、日期 `2026-11-22`、文件大小 `65 KB` / `172 KB`。
-3. 在“技术验证信息”里更新两个 SHA-256。
-4. 在项目根目录运行 `.\更新官网.ps1`。
+1. 在 `gitee-site` 下执行 `.\build.ps1`，产物是 `downloads/yingyin-box-v6.0.html`。
+2. 重新打包 `影音入库箱 v6.0/` 目录为 `downloads/yingyin-box-v6.0.zip`。
+3. 生成站点根 `SHA256SUMS`，按 `docs/VERIFY.md` 签名。
+4. 在 `index.html` 里替换 `__ZIP_SIZE__`、`__ZIP_SHA256__`、`__HTML_SHA256__`、`__BUILD_COMMIT__`。
+5. 先在本地打开 `index.html` 检查中英文；再运行 `.\更新官网.ps1` 部署。
+
+发布记录只追加，不覆盖旧版本哈希；见 `docs/VERIFY.md` 表。
 
 ## 说明
 

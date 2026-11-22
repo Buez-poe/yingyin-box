@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>影音入库箱 · 把云盘影音整理成 Jellyfin / Emby 媒体库</title>
 <meta name="description" content="影音入库箱是一个本地运行的浏览器工具：选择云盘视频目录，自动生成播放文件、NFO、影片信息和封面，打包成一个 zip。视频不上传，TMDB Key 只存本机，当前免费。">
 <meta name="theme-color" content="#0f6b5c">
@@ -244,7 +245,8 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
 .mail-head h3{margin:3px 0 0;font-size:24px;letter-spacing:-.03em}
 .mail-close{width:34px;height:34px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;flex:none}
 .mail-close:hover{color:var(--ink);border-color:#c5d6d2;background:var(--wash)}
-.mail-lede{margin:12px 0 18px;color:var(--muted);font-size:13px;line-height:1.75}
+.mail-lede{margin:12px 0 8px;color:var(--muted);font-size:13px;line-height:1.75}
+.mail-warning{margin:0 0 18px;padding:8px 12px;border:1px solid rgba(200,120,50,.28);border-radius:8px;background:rgba(200,120,50,.06);color:#8a5a2a;font-size:12px;line-height:1.7}
 .mail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .mail-grid label{display:grid;gap:6px;font-size:12px;font-weight:650;color:var(--ink-2)}
 .mail-grid label em{font-style:normal;font-weight:500;color:var(--muted-2);margin-left:4px}
@@ -327,7 +329,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
     </nav>
     <button class="lang-toggle" type="button" data-lang-toggle data-i18n-skip aria-label="Switch to English" title="Switch to English">EN</button>
     <a class="nav-cta" href="#download">
-      <span>下载 v5.7</span>
+      <span>下载 v6.0</span>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M5 21h14"/></svg>
     </a>
   </div>
@@ -343,7 +345,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
       <div class="hero-actions">
         <a class="btn btn-primary" href="#download">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M5 21h14"/></svg>
-          下载 v5.7 完整包
+          下载 v6.0 完整包
         </a>
         <a class="btn btn-ghost" href="#security">先看安全说明</a>
         <button class="btn btn-ghost" type="button" data-mail-open aria-haspopup="dialog" aria-controls="mail-dialog">
@@ -461,17 +463,17 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
     <div class="download-card">
       <div>
         <div class="kicker">下载</div>
-        <h2>影音入库箱 v5.7</h2>
-        <p class="download-lede">单文件网页版，下载后双击打开。也可以直接在线打开，不需要安装任何东西。</p>
+        <h2>影音入库箱 v6.0</h2>
+        <p class="download-lede">单文件网页版，下载后双击打开。也可以直接在线打开，不需要安装任何东西。zip 内含 manifest.json，第二周加集后导入即可只生成变化。</p>
         <div class="download-actions">
-          <a class="btn btn-light" href="downloads/yingyin-box-v5.7.zip" download="影音入库箱 v5.7.zip">
+          <a class="btn btn-light" href="downloads/yingyin-box-v6.0.zip" download="影音入库箱 v6.0.zip">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M5 21h14"/></svg>
-            下载完整包 <span style="font-weight:500;opacity:.7">53 KB</span>
+            下载完整包 <span style="font-weight:500;opacity:.7">__ZIP_SIZE__</span>
           </a>
-          <a class="btn btn-outline-light" href="downloads/yingyin-box-v5.7.html" target="_blank" rel="noopener">直接打开网页版</a>
+          <a class="btn btn-outline-light" href="downloads/yingyin-box-v6.0.html" target="_blank" rel="noopener">直接打开网页版</a>
         </div>
         <div class="download-meta">
-          <span>更新：2026-11-22</span><span>完整包：65 KB</span><span>网页版：172 KB</span>
+          <span>更新：2026-11-23</span><span>构建：<a href="https://gitee.com/a-splash-of-water/yingyin-box/commit/__BUILD_COMMIT__" target="_blank" rel="noopener"><code>__BUILD_COMMIT__</code></a></span>
         </div>
       </div>
       <div class="download-aside">
@@ -481,17 +483,18 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>使用说明（含常见故障排查）</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>4 个 NFO 示例，可直接对照</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>单集 NFO、海报、本地封面兜底</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>manifest.json：下次导入，只生成新增和变化</li>
         </ul>
-        <div class="download-note">当前免费。没有强制关注、没有加群、没有隐藏收费。下载后如果浏览器提示风险，可以先查看源码或自行杀毒扫描。</div>
+        <div class="download-note">当前免费。没有强制关注、没有加群、没有隐藏收费。下载后如果浏览器提示风险，可以先查看源码或自行杀毒扫描。<b>已下载的离线 HTML 永久可用、永不回连、永不因版本更新失效；若未来增加付费服务，已发布版本功能不锁。</b></div>
       </div>
     </div>
     <details class="tech">
       <summary>技术验证信息（给懂技术的朋友）</summary>
       <div class="tech-body">
-        <div>完整包 SHA-256：<code>f9e0eaa97578e6447d29a9ba451b264d130b0eb7b4c457287356ff0e8ca364da</code></div>
-        <div>网页版 SHA-256：<code>53765a727e724d083e4d8f3c09b611d4421ad5aea54e81748e7474abdde87f6d</code></div>
-        <div>源码与更新记录：<a data-repo-link href="https://gitee.com/a-splash-of-water/yingyin-box" target="_blank" rel="noopener">打开代码仓库</a> · 许可证：MIT</div>
-        <div>本页面不加载第三方脚本，不接统计工具。</div>
+        <div>完整包 SHA-256：<code>__ZIP_SHA256__</code></div>
+        <div>网页版 SHA-256：<code>__HTML_SHA256__</code></div>
+        <div>构建来源：<a href="https://gitee.com/a-splash-of-water/yingyin-box/commit/__BUILD_COMMIT__" target="_blank" rel="noopener"><code>__BUILD_COMMIT__</code></a> · 源码构建脚本 <code>tools/build.mjs</code> · 版本历史见 <a href="https://gitee.com/a-splash-of-water/yingyin-box/blob/master/CHANGELOG.md" target="_blank" rel="noopener">CHANGELOG</a> · 签名说明见 <a href="https://gitee.com/a-splash-of-water/yingyin-box/blob/master/docs/VERIFY.md" target="_blank" rel="noopener">VERIFY</a></div>
+        <div>校验和文件：<a href="/SHA256SUMS" target="_blank" rel="noopener">/SHA256SUMS</a> · 许可证：MIT · 本页面不加载第三方脚本，不接统计工具。</div>
       </div>
     </details>
   </section>
@@ -515,11 +518,11 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
         </div>
         <div class="sec-row">
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></div>
-          <div><b>TMDB Key</b><p>只存当前浏览器；可以一键清除；导出配置时自动去掉 Key / Token。</p></div>
+          <div><b>TMDB Key</b><p>默认只存当前浏览器 localStorage（同源可读，风险来自浏览器扩展与共用电脑）；可勾选「仅本次会话」只留内存；可一键清除；导出配置时自动去掉 Key / Token。</p></div>
         </div>
         <div class="sec-row">
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h7l2 3h9v9H3z"/><path d="M8 16h8"/></svg></div>
-          <div><b>OpenList 密码</b><p>只在当前页面内存里使用，关掉页面就没了；不写入配置，不保存到本机。</p></div>
+          <div><b>OpenList 密码</b><p>只在当前页面内存里使用，关掉页面就没了；会发给你自己填的 OpenList，不写入配置，不保存到本机。</p></div>
         </div>
       </div>
       <aside class="flow-card" aria-label="数据流向示意图">
@@ -531,9 +534,17 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
           <div class="flow-branch"><b>查询</b>片名 → TMDB</div>
           <div class="flow-branch"><b>输出</b>strm / NFO / 图片 → 你的电脑</div>
         </div>
-        <div class="flow-no">作者服务器：没有</div>
+        <div class="flow-no">业务后端：无（仅反馈表单例外）</div>
       </aside>
     </div>
+    <details class="faq" style="margin-top:18px">
+      <summary>威胁模型一页纸：凭据从哪来 / 存哪 / 活多久 / 怎么清</summary>
+      <p><b>TMDB Key / Token：</b>你手动填入 → 默认 localStorage → 活到你清除或刷新 → 点「清除 TMDB Key」或「清除全部本地数据」。勾选会话模式后只在内存。<br>
+      <b>OpenList 账号密码：</b>你手动填入 → 只在当前页面内存 → 刷新即失效 → 关闭页面即可。<br>
+      <b>OpenList token：</b>登录后由 OpenList 返回 → 只在内存 → 刷新或改地址后失效 → 重新连接即可。<br>
+      <b>生成出的 strm：</b>只含 /d/ 路径模板与可选签名，不含账号密码 → 会写进 zip → 含 sign= / token= / pwd= 的包请勿外传。<br>
+      <b>manifest.json：</b>含路径、标题、年份、TMDB ID、封面来源，不含凭据 → 随 zip 走 → 下次导入用于 diff。</p>
+    </details>
   </section>
 
   <!-- ===== FAQ ===== -->
@@ -546,14 +557,17 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
     <div class="faq-grid">
       <details class="faq"><summary>会不会上传我的视频？</summary><p><b>不会。</b> 工具只读取目录和文件名，生成播放文件；视频本身不上传，也不经过作者的服务器。</p></details>
       <details class="faq"><summary>没有 TMDB Key 能用吗？</summary><p><b>能用。</b> 会生成基础影片信息和本地标题封面，Jellyfin / Emby 照样能识别剧集结构和集号；只是没有简介、评分和官方海报。</p></details>
-      <details class="faq"><summary>Key 会被作者看到吗？</summary><p><b>不会。</b> Key 只保存在你的浏览器里；官网只有一个邮件表单接口，不接收 Key。你可以随时点“清除 TMDB Key”，或清除浏览器数据。</p></details>
+      <details class="faq"><summary>Key 会被作者看到吗？</summary><p><b>不会。</b> Key 只保存在你的浏览器里；反馈表单只接收称呼和留言，不接收视频、目录、Key 或 OpenList 凭据。你可以随时点“清除 TMDB Key”或“清除全部本地数据”，也可以勾选“仅本次会话”让它不落盘。</p></details>
       <details class="faq"><summary>为什么需要 TMDB？</summary><p>TMDB 是一个公开的影视资料库。工具把片名发过去，换回简介、评分、演职员和官方海报。不填 Key 也能用，只是资料会少一些。</p></details>
       <details class="faq"><summary>支持 Jellyfin / Emby 吗？</summary><p><b>支持。</b> 生成的是它们能识别的 <b>.strm</b>、NFO 和图片目录结构。这里是兼容说明，不代表官方合作或认证。</p></details>
       <details class="faq"><summary>NAS 密码会被保存吗？</summary><p><b>不会。</b> OpenList 的密码只在当前页面内存里使用，关掉页面就没了；配置文件也不会写入密码。</p></details>
-      <details class="faq"><summary>支持哪些浏览器？</summary><p>建议用电脑上的 Chrome 或 Edge。Safari / Firefox 不支持直接写入本地文件夹时，会自动退回 zip 下载；功能还在，只是少一个直写入口。</p></details>
+      <details class="faq"><summary>支持哪些浏览器？</summary><p>首屏会直接显示当前浏览器能力：<b>支持直写目录 / 将退回 zip / 只能 zip 下载</b>。Safari / Firefox 不支持直接写入本地文件夹时，会自动退回 zip 下载；功能还在，只是少一个直写入口。内网 http 的 OpenList 请用下载后的本地版，在线 https 版会被浏览器按混合内容阻断。</p></details>
       <details class="faq"><summary>为什么浏览器提示“可能有风险”？</summary><p>单文件 HTML 从网上下载时，部分浏览器会做保守提示，这不等于病毒结论。你可以先查看源码、用杀毒软件扫描，或在不重要的备用机试用。</p></details>
       <details class="faq"><summary>收费吗？以后会收费吗？</summary><p><b>当前免费。</b> 没有强制关注、加群或账号。以后如果增加付费服务，会提前说明，不会突然把现有功能锁掉。</p></details>
-      <details class="faq"><summary>怎么更新？</summary><p>下载新版本，覆盖旧文件即可。媒体库路径、Key 等设置保存在本机浏览器里，通常还在；更新前建议先记一下关键设置。</p></details>
+      <details class="faq"><summary>怎么更新？第二周加集怎么办？</summary><p><b>离线冻结：</b>已下载的离线 HTML 永久可用、永不回连、永不因版本更新失效；在线版可能迭代，本地那份归你。加集时不用整库重做：把上次 zip 里的 <code>manifest.json</code> 导入，工具会对比出新增、源文件变化、未变化跳过和旧条目（默认不删），只生成变化的那几条；手工放的海报 / NFO 默认不覆盖。</p></details>
+      <details class="faq"><summary>会把我的播放链接或签名传出去吗？</summary><p>工具只生成你媒体库里的 strm；链接里若含 <code>sign=</code> / <code>token=</code> / <code>pwd=</code>，页面会提示，并可在高级设置里选择不写签名、只写 <code>/d/</code> 路径模板。含鉴权参数的 zip 请勿外传。</p></details>
+      <details class="faq"><summary>多人 / 异地播放有风控风险吗？</summary><p>有。302 直连 + 异地播放会把客户端 IP 暴露给网盘，多人或异地使用可能触发网盘风控；长期多人建议用 NAS 中转或自建反代。</p></details>
+      <details class="faq"><summary>片源版权和官方合作怎么算？</summary><p>工具不含任何片源，片源版权与网盘服务条款由使用者自行负责。Jellyfin / Emby 为各自项目所有；本工具只说明兼容性，不代表官方合作或认证。</p></details>
     </div>
   </section>
 
@@ -569,7 +583,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
         <div class="kicker" style="margin-bottom:8px">作者的话</div>
         <h3><span data-author>影音入库箱作者</span>，个人开发者</h3>
         <p>我做这个工具，是因为自己用 Jellyfin 整理剧集太麻烦：文件名乱、集号乱、海报还要一张张找。于是把它做成了一个不用安装、打开就能用的网页。</p>
-        <p>这不是公司产品。官网只有一个邮件表单接口，我收不到你的视频、Key 或 NAS 密码。更新节奏不固定，但重要问题会优先修。</p>
+        <p>这不是公司产品。反馈表单只接收称呼和留言，不接触你的视频、TMDB Key、OpenList 密码或目录；唯一例外会在提交前把 payload 摊开给你看。更新节奏不固定，但重要问题会优先修。</p>
         <div class="quote">“我不敢说它完美，但尽量做到三件事：不碰你的视频和密码；不在后台收数据；出了问题能找到我。”</div>
         <div class="about-links">
           <a data-repo-link href="https://gitee.com/a-splash-of-water/yingyin-box" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 9l-3 3 3 3M16 9l3 3-3 3M13 6l-2 12"/></svg>代码与更新记录</a>
@@ -610,8 +624,8 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
       </div>
     </div>
     <div class="legal">
-      <span>本产品使用 TMDB API，但未获得 TMDB 认可或认证。Jellyfin、Emby、OpenList 为各自商标，本文仅说明兼容性，不代表官方合作。本站不接入统计工具。</span>
-      <span>© <span data-year>2026</span> 影音入库箱 · MIT License</span>
+      <span>This product uses the TMDB API but is not endorsed or certified by TMDB. TMDB 海报等资料仅作本地媒体库展示，缓存不超过 6 个月，不得用于训练 AI；非商业使用。Jellyfin、Emby、OpenList 为各自商标，本文仅说明兼容性，不代表官方合作。本站不接入统计工具。</span>
+      <span>© <span data-year>2026</span> a-splash-of-water · MIT License · 构建 <a href="https://gitee.com/a-splash-of-water/yingyin-box/commit/__BUILD_COMMIT__" target="_blank" rel="noopener"><code>__BUILD_COMMIT__</code></a> · <a href="/SHA256SUMS" target="_blank" rel="noopener">SHA256SUMS</a></span>
     </div>
   </div>
 </footer>
@@ -625,12 +639,11 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
       </div>
       <button class="mail-close" type="button" data-mail-close aria-label="关闭邮件窗口">×</button>
     </div>
-    <p class="mail-lede">可以直接在这里提交，内容会通过官网的邮件接口发给作者；不读取你的邮箱，也不会显示收件地址。发送失败时，仍可以用自己的邮箱发送。</p>
+    <p class="mail-lede">可以直接在这里提交。唯一例外说清楚：称呼和留言会经官网转发接口 <code>/api/contact</code> 送给作者，不接触视频、目录、TMDB Key 或 OpenList 凭据。提交前可在 DevTools → Network 看到完整 payload。发送失败时，仍可以用自己的邮箱发送。</p>
+    <p class="mail-warning">请勿粘贴 TMDB Key / Token、OpenList 密码或带 sign= / token= / pwd= 的完整播放 URL；命中会自动拦截发送。</p>
     <div class="mail-grid">
       <label>你的称呼<em>可选</em><input name="name" maxlength="48" autocomplete="name" placeholder="怎么称呼你"></label>
-      <label>你的邮箱<em>可选</em><input name="reply" type="email" maxlength="160" autocomplete="email" placeholder="方便作者回复你"></label>
-      <label class="full">想说的话<em>必填</em><textarea name="message" maxlength="1200" placeholder="例如：卡在哪一步、用的什么浏览器、有没有报错提示……"></textarea></label>
-    </div>
+      <label class="full">想说的话<em>必填</em><textarea name="message" maxlength="1200" placeholder="例如：卡在哪一步、用的什么浏览器、有没有报错提示……"></textarea></label>    </div>
     <label class="mail-honey" aria-hidden="true">公司<input name="company" tabindex="-1" autocomplete="off"></label>
     <div class="mail-actions">
       <button class="btn btn-primary" type="submit">直接发送</button>
@@ -649,7 +662,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
 <script>
 /* ===== 只改这一段：作者昵称 / 仓库地址 ===== */
 const SITE_CONFIG = {
-  author: "影音入库箱作者",       // 改成你的昵称
+  author: "a-splash-of-water",       // 固定可追标识：Gitee 账号
   emailB64: "MzAzNzQyMjEwNEBxcS5jb20=", // 联系邮箱的 Base64，避免源码明文
   giteeRepo: "https://gitee.com/a-splash-of-water/yingyin-box", // 公开源码仓库
   githubRepo: ""                  // 可选，例如 "https://github.com/你的用户名/仓库"
@@ -711,7 +724,7 @@ const SITE_CONFIG = {
     if (!form) return { name: "", reply: "", message: "" };
     return {
       name: String((form.querySelector('[name="name"]') || {}).value || "").trim(),
-      reply: String((form.querySelector('[name="reply"]') || {}).value || "").trim(),
+      reply: "",
       message: String((form.querySelector('[name="message"]') || {}).value || "").trim(),
       company: String((form.querySelector('[name="company"]') || {}).value || "").trim()
     };
@@ -844,6 +857,15 @@ const SITE_CONFIG = {
         if (message) message.focus();
         return;
       }
+      if (/Bearer\s+[A-Za-z0-9._~+\/-]{16,}/i.test(fields.message) ||
+          /eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/.test(fields.message) ||
+          /\b(?:api[_-]?key|access[_-]?token|token|password|passwd|pwd)\s*[:=]\s*\S{8,}/i.test(fields.message) ||
+          /https?:\/\/\S*[?&](?:sign|token|pwd)=/i.test(fields.message)) {
+        setNote("留言里疑似有凭据或带签名的播放链接，已拦截发送。请删掉 Key / Token / 密码 / sign= 后再发。", true);
+        const message = mailForm.querySelector('[name="message"]');
+        if (message) message.focus();
+        return;
+      }
 
       const submitBtn = mailForm.querySelector('button[type="submit"]');
       if (submitBtn) {
@@ -858,7 +880,6 @@ const SITE_CONFIG = {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: fields.name,
-            reply: fields.reply,
             message: fields.message,
             company: fields.company
           })
@@ -867,7 +888,7 @@ const SITE_CONFIG = {
         try { data = await response.json(); } catch (err) {}
 
         if (response.ok && data.ok) {
-          setNote("已发送。作者会通过邮箱回复你。", false);
+          setNote("已发送。作者会尽量回复；如需留联系方式，可写在留言里。", false);
           mailForm.reset();
           return;
         }
@@ -936,8 +957,8 @@ const SITE_CONFIG = {
     "个人开发 · 本地运行 · 当前免费": "Indie built · Runs locally · Free for now",
     "把云盘影音，整理成 Jellyfin / Emby 认得的样子。": "Turn cloud media into a library that Jellyfin / Emby understands.",
     "选择视频目录，填好媒体库位置，点一下生成。播放文件、影片信息、海报和封面自动处理，最后打成一个 zip。": "Choose a video folder, set the media library path, and hit Generate. Playback files, metadata, posters, and covers are handled automatically, then packed into a zip.",
-    "下载 v5.7": "Download v5.7",
-    "下载 v5.7 完整包": "Download v5.7 full pack",
+    "下载 v6.0": "Download v6.0",
+    "下载 v6.0 完整包": "Download v6.0 full pack",
     "先看安全说明": "Read safety notes",
     "邮箱联系": "Email the author",
     "不用安装 · 不用注册 · Windows / macOS / Linux 浏览器通用": "No install · No signup · Works in browsers on Windows / macOS / Linux",
@@ -960,7 +981,7 @@ const SITE_CONFIG = {
     ".strm 播放文件": ".strm playback files",
     "。视频本身不会上传给作者，也不会经过任何中间服务器。": ". Videos are never uploaded to the author or routed through any intermediary server.",
     "TMDB Key 只存本机": "TMDB Key stays on this device",
-    "Key 只保存在当前浏览器的 localStorage，官网只有一个邮件表单接口，收不到 Key。输入框下方有": "The key is stored only in this browser's localStorage. The website has just one email-form endpoint and cannot receive keys. Under the input field there is",
+    "Key 默认只存当前浏览器 localStorage（同源可读，风险来自浏览器扩展与共用电脑）；可勾选「仅本次会话」只留内存；可一键清除；输入框下方有": "The key is stored by default in this browser's localStorage (same-origin readable; risk comes from extensions and shared computers). Tick “this session only” to keep it in memory; one-click clear. Under the input field there is",
     "“清除 TMDB Key”": "“Clear TMDB Key”",
     "，点一下就能清空。": ". One click clears it.",
     "NAS 密码不保存": "NAS passwords are never stored",
@@ -983,17 +1004,41 @@ const SITE_CONFIG = {
     "没有 TMDB Key 也能用。": "Works without a TMDB key.",
     "只生成基础影片信息和本地封面；填了 Key 才会多出简介、评分和官方海报。第一次用，建议先不填 Key 试一遍。": "Only basic metadata and local covers are generated; with a key you also get overviews, ratings, and official posters. For a first try, leave the key empty.",
     "下载": "Download",
-    "影音入库箱 v5.7": "Yingyin Box v5.7",
-    "单文件网页版，下载后双击打开。也可以直接在线打开，不需要安装任何东西。": "Single-file web app—download and double-click. You can also open it online; nothing needs installing.",
+    "影音入库箱 v6.0": "Yingyin Box v6.0",
+    "单文件网页版，下载后双击打开。也可以直接在线打开，不需要安装任何东西。zip 内含 manifest.json，第二周加集后导入即可只生成变化。": "Single-file web app—download and double-click. You can also open it online; nothing needs installing. The zip includes manifest.json, so next week you can import it and generate only changes.",
     "下载完整包": "Download full pack",
     "直接打开网页版": "Open the web app",
-    "更新：2026-11-22": "Updated: 2026-11-22",
+    "更新：2026-11-23": "Updated: 2026-11-23",
     "包里有什么": "What's inside",
     "单文件网页版，双击即用": "Single-file web app; double-click to run",
     "使用说明（含常见故障排查）": "Usage notes, including common troubleshooting",
     "4 个 NFO 示例，可直接对照": "4 sample NFO files for direct comparison",
     "单集 NFO、海报、本地封面兜底": "Episode NFO, posters, local cover fallback",
-    "当前免费。没有强制关注、没有加群、没有隐藏收费。下载后如果浏览器提示风险，可以先查看源码或自行杀毒扫描。": "Free for now. No mandatory follows, group chats, or hidden fees. If your browser warns about the download, inspect the source or scan it with your own antivirus.",
+    "manifest.json：下次导入，只生成新增和变化": "manifest.json: import next time to generate only additions and changes",
+    "当前免费。没有强制关注、没有加群、没有隐藏收费。下载后如果浏览器提示风险，可以先查看源码或自行杀毒扫描。已下载的离线 HTML 永久可用、永不回连、永不因版本更新失效；若未来增加付费服务，已发布版本功能不锁。": "Free for now. No mandatory follows, group chats, or hidden fees. If your browser warns about the download, inspect the source or scan it with your own antivirus. A downloaded offline HTML works forever, never calls back, and never expires with a version update; if paid services are added later, published versions remain unlocked.",
+    "默认只存当前浏览器 localStorage（同源可读，风险来自浏览器扩展与共用电脑）；可勾选「仅本次会话」只留内存；可一键清除；导出配置时自动去掉 Key / Token。": "Stored by default in this browser's localStorage (same-origin readable; risk comes from browser extensions and shared computers). Tick “this session only” to keep it in memory; one-click clear; keys/tokens are stripped from exported config.",
+    "只在当前页面内存里使用，关掉页面就没了；会发给你自己填的 OpenList，不写入配置，不保存到本机。": "Used only in this page's memory; gone when the page closes. It is sent to the OpenList you entered, never written to config or saved locally.",
+    "业务后端：无（仅反馈表单例外）": "Business backend: none (feedback form is the only exception)",
+    "威胁模型一页纸：凭据从哪来 / 存哪 / 活多久 / 怎么清": "One-page threat model: where credentials come from / where stored / lifetime / how to clear",
+    "怎么更新？第二周加集怎么办？": "How do I update? What about adding episodes next week?",
+    "离线冻结：": "Offline freeze: ",
+    "已下载的离线 HTML 永久可用、永不回连、永不因版本更新失效；在线版可能迭代，本地那份归你。加集时不用整库重做：把上次 zip 里的": "A downloaded offline HTML works forever, never calls back, and never expires with a version update; the online version may evolve, but the local copy is yours. To add episodes, don't rebuild the whole library: import the",
+    "导入，工具会对比出新增、源文件变化、未变化跳过和旧条目（默认不删），只生成变化的那几条；手工放的海报 / NFO 默认不覆盖。": "from the last zip. The tool diffs additions, source changes, unchanged entries, and old entries (kept by default), then generates only what changed. Hand-placed posters / NFO files are never overwritten by default.",
+    "会把我的播放链接或签名传出去吗？": "Will my playback links or signatures be sent out?",
+    "工具只生成你媒体库里的 strm；链接里若含": "The tool only generates .strm files in your library. If a link contains",
+    "，页面会提示，并可在高级设置里选择不写签名、只写": ", the page warns you and lets you omit the signature, writing only the",
+    "路径模板。含鉴权参数的 zip 请勿外传。": "path template. Do not share zips containing auth parameters.",
+    "多人 / 异地播放有风控风险吗？": "Is there a risk-control issue with multi-user / remote playback?",
+    "有。302 直连 + 异地播放会把客户端 IP 暴露给网盘，多人或异地使用可能触发网盘风控；长期多人建议用 NAS 中转或自建反代。": "Yes. 302 direct links + remote playback expose client IPs to the cloud drive; multi-user or remote use may trigger risk controls. For long-term multi-user use, relay through a NAS or self-hosted reverse proxy.",
+    "片源版权和官方合作怎么算？": "What about copyright and official partnerships?",
+    "工具不含任何片源，片源版权与网盘服务条款由使用者自行负责。Jellyfin / Emby 为各自项目所有；本工具只说明兼容性，不代表官方合作或认证。": "The tool contains no media. Copyright and cloud-drive terms are the user's responsibility. Jellyfin / Emby belong to their respective projects; this tool only describes compatibility and does not imply official partnership or certification.",
+    "这不是公司产品。反馈表单只接收称呼和留言，不接触你的视频、TMDB Key、OpenList 密码或目录；唯一例外会在提交前把 payload 摊开给你看。更新节奏不固定，但重要问题会优先修。": "This is not a company product. The feedback form receives only a name and message; it never touches your videos, TMDB key, OpenList password, or folders. The one exception is disclosed before submission, with the full payload visible. Release cadence is irregular, but important issues get fixed first.",
+    "This product uses the TMDB API but is not endorsed or certified by TMDB. TMDB 海报等资料仅作本地媒体库展示，缓存不超过 6 个月，不得用于训练 AI；非商业使用。Jellyfin、Emby、OpenList 为各自商标，本文仅说明兼容性，不代表官方合作。本站不接入统计工具。": "This product uses the TMDB API but is not endorsed or certified by TMDB. TMDB posters and metadata are for local library display only, cached no longer than 6 months, and must not be used to train AI; non-commercial use. Jellyfin, Emby, and OpenList are trademarks of their respective owners; compatibility mentions do not imply official partnerships. This site uses no analytics.",
+    "可以直接在这里提交。唯一例外说清楚：称呼和留言会经官网转发接口": "You can submit here directly. The one exception, stated clearly: your name and message go through the site's forwarding endpoint",
+    "请勿粘贴 TMDB Key / Token、OpenList 密码或带 sign= / token= / pwd= 的完整播放 URL；命中会自动拦截发送。": "Do not paste TMDB keys / tokens, OpenList passwords, or full playback URLs containing sign= / token= / pwd=. Matching messages are blocked.",
+    "留言里疑似有凭据或带签名的播放链接，已拦截发送。请删掉 Key / Token / 密码 / sign= 后再发。": "The message appears to contain credentials or a signed playback URL, so it was blocked. Remove the key / token / password / sign= and try again.",
+    "送给作者，不接触视频、目录、TMDB Key 或 OpenList 凭据。提交前可在 DevTools → Network 看到完整 payload。发送失败时，仍可以用自己的邮箱发送。": "to the author. It never touches videos, folders, TMDB keys, or OpenList credentials. You can see the full payload in DevTools → Network before submitting. If sending fails, you can still use your own email app.",
+    "已发送。作者会尽量回复；如需留联系方式，可写在留言里。": "Sent. The author will try to reply; include contact details in the message if you want a response.",
     "技术验证信息（给懂技术的朋友）": "Technical verification (for technical users)",
     "源码与更新记录：": "Source and changelog: ",
     "打开代码仓库": "Open the code repository",
@@ -1029,7 +1074,7 @@ const SITE_CONFIG = {
     "能用。": "Yes.",
     "会生成基础影片信息和本地标题封面，Jellyfin / Emby 照样能识别剧集结构和集号；只是没有简介、评分和官方海报。": "It generates basic metadata and a local title cover; Jellyfin / Emby can still recognize the series structure and episode numbers. You just won't get overviews, ratings, or official posters.",
     "Key 会被作者看到吗？": "Can the author see my key?",
-    "Key 只保存在你的浏览器里；官网只有一个邮件表单接口，不接收 Key。你可以随时点“清除 TMDB Key”，或清除浏览器数据。": "The key stays in your browser. The website has one email-form endpoint and never receives keys. You can click “Clear TMDB Key” at any time, or clear browser data.",
+    "Key 只保存在你的浏览器里；反馈表单只接收称呼和留言，不接收视频、目录、Key 或 OpenList 凭据。你可以随时点“清除 TMDB Key”或“清除全部本地数据”，也可以勾选“仅本次会话”让它不落盘。": "The key stays in your browser. The feedback form receives only a name and message—never videos, folders, keys, or OpenList credentials. You can click “Clear TMDB Key” or “Clear all local data” at any time, or tick “this session only” to keep it out of storage.",
     "为什么需要 TMDB？": "Why is TMDB needed?",
     "TMDB 是一个公开的影视资料库。工具把片名发过去，换回简介、评分、演职员和官方海报。不填 Key 也能用，只是资料会少一些。": "TMDB is a public film and TV database. The tool sends the title and gets back overviews, ratings, cast, and official posters. It works without a key, with less metadata.",
     "支持 Jellyfin / Emby 吗？": "Does it support Jellyfin / Emby?",
