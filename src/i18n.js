@@ -55,6 +55,8 @@
       "Only missing episodes: compare existing .strm files in the library and skip them (library path required)",
     "默认开启。按剧名 + 季号在媒体库里比对同名 strm，只打包新增集；未填媒体库目录时自动降级为全量生成。整部重做时请关掉。":
       "On by default. Compares same-name .strm files by title + season in the library and packages only new episodes. If no library path is set, it falls back to a full run. Turn off to rebuild the whole series.",
+    "默认开启。导入上次 manifest 时按 manifest 精确对比新增 / 变化 / 未变化；未导入时按剧名 + 季号比对媒体库里已有的 strm。整部重做时请关掉。":
+      "On by default. With an imported manifest it compares additions / changes / unchanged entries precisely; without one it falls back to matching existing .strm files by title + season. Turn off to rebuild the whole series.",
     "生成后直接上传到媒体库（免下载解压）":
       "Upload directly to the media library after generation (no download/unzip)",
     "通过 OpenList 上传接口把 strm 写进上面的目标目录，写完只需在 Jellyfin/Emby 扫库。需目标目录有效且账号有写权限；失败会自动保留 zip 下载兜底。":
@@ -342,6 +344,12 @@
     "数据边界：": "Data boundary: ",
     "威胁模型一页纸（凭据从哪来 / 存哪 / 活多久 / 怎么清）":
       "One-page threat model (where credentials come from / where stored / lifetime / how to clear)",
+    "已下载的离线 HTML 永久可用、永不回连、永不因版本更新失效；在线版可能迭代，本地那份归你。若未来增加付费服务，已发布版本功能不锁。":
+      "A downloaded offline HTML keeps working forever, never calls back, and never expires because of a version update. The online copy may evolve; the local copy is yours. If a paid service is added later, already-published versions will not be feature-locked.",
+    "没有接收视频 / Key / OpenList 凭据的业务后端。视频与目录只在浏览器和你的 OpenList 之间流动；TMDB Key 只发给 TMDB；OpenList 密码只在当前页面内存里，会发给你自己的 OpenList。唯一例外是官网底部反馈表单：称呼与留言经转发接口送给作者，不接触视频、目录、Key 或 OpenList 凭据，提交前可在 DevTools → Network 看到完整 payload。":
+      "No business backend receives videos, keys or OpenList credentials. Videos and folders move only between your browser and your own OpenList; the TMDB key goes only to TMDB; the OpenList password lives only in page memory and goes only to your own OpenList. The one exception is the feedback form at the bottom of the website: a name and message go through the forwarding endpoint to the author, without videos, folders, keys or OpenList credentials, and the full payload is visible in DevTools → Network before submission.",
+    "This product uses the TMDB API but is not endorsed or certified by TMDB. 本工具非商业使用；TMDB 海报等资料仅作本地媒体库展示，缓存不超过 6 个月，不得用于训练 AI。Jellyfin / Emby 为其各自项目所有；本工具与它们没有官方合作或认证关系。片源版权与网盘服务条款由使用者自行负责，工具不含任何片源。":
+      "This product uses the TMDB API but is not endorsed or certified by TMDB. This tool is non-commercial; TMDB posters and metadata are used only for local media-library display, cached for no more than 6 months, and must not be used to train AI. Jellyfin and Emby belong to their respective projects; this tool has no official partnership or certification with them. Copyright and cloud-drive terms for the media itself are the user's responsibility; the tool contains no media.",
   };
 
   var PAIRS = Object.keys(DICT)
