@@ -92,6 +92,7 @@ button,a{ -webkit-tap-highlight-color:transparent }
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:0 20px;border-radius:11px;
   border:1px solid transparent;font-family:inherit;font-weight:750;font-size:14px;line-height:1.2;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
 .btn:hover{text-decoration:none;transform:translateY(-1px)}
+.btn:disabled{opacity:.62;cursor:wait;transform:none}
 .btn-primary{background:var(--brand);color:#fff;box-shadow:0 10px 24px rgba(15,107,92,.2)}
 .btn-primary:hover{background:#0b5d50}
 .btn-ghost{background:#fff;color:var(--ink);border-color:var(--line)}
@@ -234,6 +235,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
 .mail-dialog[open]{animation:mailIn .18s ease-out}
 @keyframes mailIn{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
 .mail-form{padding:26px}
+.mail-honey{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
 .mail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
 .mail-head h3{margin:3px 0 0;font-size:24px;letter-spacing:-.03em}
 .mail-close{width:34px;height:34px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;flex:none}
@@ -618,14 +620,15 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
       </div>
       <button class="mail-close" type="button" data-mail-close aria-label="关闭邮件窗口">×</button>
     </div>
-    <p class="mail-lede">网页本身没有后台，不会替你直接发送。填好后会打开你电脑或手机上的邮箱，确认内容再点发送。</p>
+    <p class="mail-lede">可以直接在这里提交，内容会通过官网的邮件接口发给作者；不读取你的邮箱，也不会显示收件地址。发送失败时，仍可以用自己的邮箱发送。</p>
     <div class="mail-grid">
-      <label>你的称呼<em>可选</em><input name="name" autocomplete="name" placeholder="怎么称呼你"></label>
-      <label>你的邮箱<em>可选</em><input name="reply" type="email" autocomplete="email" placeholder="方便作者回复你"></label>
+      <label>你的称呼<em>可选</em><input name="name" maxlength="48" autocomplete="name" placeholder="怎么称呼你"></label>
+      <label>你的邮箱<em>可选</em><input name="reply" type="email" maxlength="160" autocomplete="email" placeholder="方便作者回复你"></label>
       <label class="full">想说的话<em>必填</em><textarea name="message" maxlength="1200" placeholder="例如：卡在哪一步、用的什么浏览器、有没有报错提示……"></textarea></label>
     </div>
+    <label class="mail-honey" aria-hidden="true">公司<input name="company" tabindex="-1" autocomplete="off"></label>
     <div class="mail-actions">
-      <button class="btn btn-primary" type="submit">打开邮箱发送</button>
+      <button class="btn btn-primary" type="submit">直接发送</button>
       <button class="btn btn-ghost" type="button" data-mail-copy-body>复制内容</button>
     </div>
     <p class="mail-note" id="mail-note" role="status" aria-live="polite"></p>
@@ -700,7 +703,8 @@ const SITE_CONFIG = {
     return {
       name: String((form.querySelector('[name="name"]') || {}).value || "").trim(),
       reply: String((form.querySelector('[name="reply"]') || {}).value || "").trim(),
-      message: String((form.querySelector('[name="message"]') || {}).value || "").trim()
+      message: String((form.querySelector('[name="message"]') || {}).value || "").trim(),
+      company: String((form.querySelector('[name="company"]') || {}).value || "").trim()
     };
   }
 
@@ -806,22 +810,56 @@ const SITE_CONFIG = {
   }
 
   if (mailForm) {
-    mailForm.addEventListener("submit", event => {
+    mailForm.addEventListener("submit", async event => {
       event.preventDefault();
       const fields = mailFields();
-      if (!mailEmail) {
-        setNote("邮箱入口暂未配置。", true);
-        return;
-      }
       if (!fields.message) {
         setNote("先写一下要反馈的内容。", true);
         const message = mailForm.querySelector('[name="message"]');
         if (message) message.focus();
         return;
       }
-      setNote("正在打开你的邮箱客户端…", false);
-      window.location.href = mailHref(mailSubject(), mailBody());
-      setTimeout(closeMailDialog, 250);
+
+      const submitBtn = mailForm.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.setAttribute("aria-busy", "true");
+      }
+      setNote("正在发送…", false);
+
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: fields.name,
+            reply: fields.reply,
+            message: fields.message,
+            company: fields.company
+          })
+        });
+        let data = {};
+        try { data = await response.json(); } catch (err) {}
+
+        if (response.ok && data.ok) {
+          setNote("已发送。作者会通过邮箱回复你。", false);
+          mailForm.reset();
+          return;
+        }
+
+        if (response.status === 503) {
+          setNote("直接发送暂未开通，请用下方“直接打开邮箱”或“复制内容”。", true);
+          return;
+        }
+        setNote(data.message || "发送失败，请用下方方式联系作者。", true);
+      } catch (err) {
+        setNote("网络连接失败，请用下方方式联系作者。", true);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.removeAttribute("aria-busy");
+        }
+      }
     });
   }
 
