@@ -1,6 +1,8 @@
-# 影音入库箱 · 官网（Gitee Pages 免费版）
+# 影音入库箱 · 官网
 
-这是一个纯静态官网，给国内小白用户看的。没有后端、没有统计、没有第三方脚本。
+在线地址：**https://yingyin-box-site.pages.dev/**
+
+纯静态官网，给国内小白用户看。没有后端、没有统计、没有第三方脚本。
 
 ## 文件结构
 
@@ -10,24 +12,30 @@ downloads/yingyin-box-v5.7.html   影音入库箱 v5.7 网页版
 downloads/yingyin-box-v5.7.zip    影音入库箱 v5.7 完整包
 README.md                         本说明
 LICENSE                           MIT 许可证
+部署说明.txt                      部署与更新步骤
 ```
 
-## 上传到 Gitee Pages（零成本）
+## 当前部署
 
-1. 打开 [Gitee](https://gitee.com/) 注册账号，按提示完成实名认证。
-2. 新建一个**公开仓库**，例如 `yingyin` 或 `media-box`。
-3. 把本目录里的全部文件上传到仓库根目录，保持 `downloads/` 文件夹结构。
-4. 打开仓库页面 → **服务** → **Gitee Pages**。
-5. 部署分支选 `master`（或你的默认分支），部署目录填 `/`，勾选“强制使用 HTTPS”，点**启动**。
-6. 等 1–5 分钟，访问：
+- 平台：Cloudflare Pages（Direct Upload 直传）
+- 项目名：`yingyin-box-site`
+- 生产分支：`main`
+- 在线域名：`https://yingyin-box-site.pages.dev/`
+- 无需备案，免费额度足够这个静态站使用。
 
+> Gitee Pages 已于 2024 年下线，不能再作为网页托管；本仓库只保留源码和官网文件。
+
+## 更新线上站点
+
+在本目录执行：
+
+```powershell
+npx wrangler pages deploy . --project-name yingyin-box-site --branch main
 ```
-https://你的用户名.gitee.io/仓库名/
-```
 
-例如 `https://yourname.gitee.io/yingyin/`。
+需要先在本机配置 Cloudflare 的 `CLOUDFLARE_API_TOKEN` 和 `CLOUDFLARE_ACCOUNT_ID`，Token 只放在本机环境变量或临时文件里，不要提交到仓库。
 
-> Gitee Pages 免费版每次更新后，需要回到 Pages 页面手动点一次“更新”。自定义域名属于付费 Pro 功能，免费版用 `gitee.io` 子域名即可，不需要备案。
+也可以在 Cloudflare 控制台进入 `Workers & Pages → yingyin-box-site → 创建新部署`，选择“上传静态文件”，把本目录整体拖进去。
 
 ## 改作者信息
 
@@ -37,28 +45,21 @@ https://你的用户名.gitee.io/仓库名/
 const SITE_CONFIG = {
   author: "影音入库箱作者",
   email: "",
-  giteeRepo: "",
+  giteeRepo: "https://gitee.com/a-splash-of-water/yingyin-box",
   githubRepo: ""
 };
 ```
 
-- `author`：改成你的昵称，页面“关于作者”会同步显示。
+- `author`：作者昵称，“关于作者”会同步显示。
 - `email`：想公开联系邮箱就填；留空则只显示仓库反馈入口。
-- `giteeRepo` / `githubRepo`：留空会自动识别当前 Gitee Pages 仓库；用自定义域名时再手动填完整地址。
+- `giteeRepo` / `githubRepo`：源码仓库地址。
 
 ## 更新版本
 
 1. 替换 `downloads/` 里的网页版和 zip。
 2. 在 `index.html` 里搜索并替换：版本号 `v5.7`、日期 `2026-11-22`、文件大小 `53 KB` / `140 KB`。
 3. 在“技术验证信息”里更新两个 SHA-256。
-4. 上传到 Gitee，回到 Gitee Pages 点“更新”。
-
-## 可选：海外/技术用户备用站
-
-如果要额外放一个 Cloudflare Pages 或 GitHub Pages 镜像：
-
-- Cloudflare Pages：免费，但中国大陆没有节点，晚高峰可能较慢，适合备用，不适合当主入口。
-- GitHub Pages：免费，但 `github.io` 在国内不稳定，建议只作为源码仓库，不要当主下载入口。
+4. 重新执行上面的 `wrangler pages deploy` 命令。
 
 ## 说明
 

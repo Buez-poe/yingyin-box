@@ -1,48 +1,59 @@
-影音入库箱 · 官网 Gitee Pages 部署说明
-========================================
+影音入库箱 · 官网部署说明
+================================
 
-一、准备工作
-1. 打开 https://gitee.com/ 注册账号。
-2. 按 Gitee 提示完成实名认证（开 Pages 通常需要）。
+线上地址
+--------
+https://yingyin-box-site.pages.dev/
 
-二、建仓库
-1. 右上角 “+” → 新建仓库。
-2. 仓库名填：yingyin（也可以叫 media-box）。
-3. 选择“公开”，勾选“使用 Readme 文件初始化”，创建。
+当前状态
+--------
+- 已用 Cloudflare Pages 免费静态托管上线。
+- 项目名：yingyin-box-site
+- 生产分支：main
+- 不需要备案，免费额度够用。
+- Gitee Pages 已经下线，不要再按旧教程去 Gitee 开 Pages。
 
-三、上传文件
-把本压缩包解压后，里面的这些内容全部上传到仓库根目录：
-  index.html
-  downloads/yingyin-box-v5.7.html
-  downloads/yingyin-box-v5.7.zip
-  README.md
-  LICENSE
-  部署说明.txt
 
-注意：downloads 文件夹要一起上传，不要只传 index.html。
+以后怎么更新
+------------
+方法一：命令行（推荐，最快）
+1. 在本目录打开 PowerShell。
+2. 确认本机已设置 CLOUDFLARE_API_TOKEN 和 CLOUDFLARE_ACCOUNT_ID。
+3. 执行：
+   npx wrangler pages deploy . --project-name yingyin-box-site --branch main
+4. 等命令输出 Deployment complete，打开上面的网址刷新即可。
 
-四、开 Gitee Pages
-1. 打开仓库页面。
-2. 点上方“服务” → “Gitee Pages”。
-3. 部署分支选 master（或你的默认分支）。
-4. 部署目录填：/
-5. 勾选“强制使用 HTTPS”。
-6. 点“启动”，等 1–5 分钟。
+方法二：网页上传
+1. 打开 https://dash.cloudflare.com/
+2. 进入 Workers & Pages → yingyin-box-site。
+3. 点“创建新部署”，选“上传静态文件”。
+4. 把本目录里的 index.html、downloads 文件夹等一起拖进去。
+5. 点部署，等完成。
 
-五、访问
-地址是：
-  https://你的用户名.gitee.io/yingyin/
 
-例如用户名是 zhangsan，仓库叫 yingyin，就是：
-  https://zhangsan.gitee.io/yingyin/
+文件怎么放
+----------
+index.html                        首页，必须放在最外层
+downloads/yingyin-box-v5.7.html   网页版工具
+downloads/yingyin-box-v5.7.zip    完整包
+README.md                         项目说明
+LICENSE                           MIT 许可证
+部署说明.txt                      本文件
 
-六、以后更新
-1. 替换 downloads 里的新版本文件。
-2. 上传到仓库。
-3. 回到 Gitee Pages 页面，点一次“更新”。
+注意：downloads 文件夹要整个上传，不能只传 index.html。
 
-说明
-- Gitee Pages 免费版需要手动点“更新”，不会自动部署。
-- 免费版使用 gitee.io 子域名，不需要备案；自定义域名属于付费 Pro 功能。
-- 如果只是想先看效果，直接双击 index.html 也能看页面；下载按钮要等上传到 Gitee 后才生效。
-- 改作者昵称：打开 index.html，拉到最后，找到 SITE_CONFIG，把 author 改成你的昵称。
+
+改作者信息
+----------
+打开 index.html，拉到最底部，找到 SITE_CONFIG：
+  author      作者昵称
+  email       想公开的邮箱，留空就不显示
+  giteeRepo   源码仓库地址
+
+改完保存，再按上面的方法重新部署一次。
+
+
+安全提醒
+--------
+- Cloudflare API Token 只放在本机环境变量或临时文件，不要写进网页、README、Git 仓库。
+- 本站没有后端，不接收视频，不保存 TMDB Key。
