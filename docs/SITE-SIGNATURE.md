@@ -12,7 +12,7 @@ SHA256:5HIRWZfB7RppTD0S8S1P6rwPof2FWwS2dykAWOO93xU
 SITE-SHA256SUMS.sig
   └─ 签名 SITE-SHA256SUMS
        ├─ index.html、app.html、README、LICENSE、CHANGELOG
-       ├─ docs/*.md、下载包、离线存档包、functions/api/contact.js
+       ├─ docs/*.md、下载包、离线存档包
        └─ SHA256SUMS（发布包清单）
             ├─ downloads/yingyin-box-v6.0.zip
             ├─ downloads/yingyin-box-v6.0-offline-archive.zip
@@ -80,4 +80,5 @@ Good "yingyin-box-SITE-SHA256SUMS" signature for a-splash-of-water with ED25519 
 
 - Cloudflare Pages 会把 `/app.html`、`/docs/SITE-SIGNATURE.md` 这类地址 308 重定向到无扩展名地址；下载到本地校验时请保持清单里的原文件名。
 - 签名文件与私钥分离：仓库只提交公钥、`allowed_signers` 和签名；私钥在作者本机 `.signing/`，不发布。
+- `functions/api/contact.js` 是编译进 Pages Functions 的源码，不作为静态文件发布，因此不进入整站清单；它的源码版本由 Gitee 仓库 commit 覆盖。
 - 任何对官网页面、文档、下载包或 `SHA256SUMS` 的改动，都会让整站校验或验签失败。
