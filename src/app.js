@@ -113,7 +113,9 @@
     importedManifest = null,
     importedManifestName = "",
     activeManifest = null,
-    lastPreflight = null;
+    lastPreflight = null,
+    preflightResolver = null,
+    overwriteModeConfirmed = false;
   const C = {
     "&": "&amp;",
     "<": "&lt;",
@@ -1147,7 +1149,7 @@
       clearTimeout(s);
     }
   }
-  async function xe(e, n) {
+  async function xe(e, n, manifest) {
     const r = W(),
       o = e
         .filter((e) => e.libDir && e.prefix)
@@ -1155,6 +1157,7 @@
           target: P(ht(e.libDir, e.prefix, e.season), e.filename),
           content: e.content,
           filename: e.filename,
+          libDir: O(e.libDir),
         })),
       a = e.length - o.length;
     if (!o.length)
@@ -1186,12 +1189,58 @@
     t("strmProgress").style.display = "none";
     const l = i.filter((e) => e && e.ok).length,
       c = i.filter((e) => e && e.error).map((e) => e.error);
+    let manifestResult = null;
+    if (manifest && o.length) {
+      if (c.length) {
+        manifestResult = {
+          ok: false,
+          target: P(o[0].libDir, "manifest.json"),
+          error: "有 " + c.length + " 个 strm 上传失败，manifest 未写回，避免下次误判为已存在",
+        };
+        K(n, "manifest 未写回：本次有 strm 上传失败，先修好失败项再重跑", "warn-t");
+      } else {
+        const target = P(o[0].libDir, "manifest.json"),
+          merged = await manifestForLibraryRoot(o[0].libDir, manifest);
+        if (!merged) {
+          manifestResult = {
+            ok: false,
+            target,
+            error:
+              "读取现有媒体库 manifest 失败，本次不写回，避免覆盖其他剧集的条目",
+          };
+          K(
+            n,
+            "manifest 未写回：读取现有媒体库 manifest 失败，不能安全合并",
+            "warn-t",
+          );
+        } else {
+          const wrote = await Ee(target, manifestFileOf(merged).content);
+          manifestResult = {
+            ok: !!wrote.ok,
+            target,
+            error: wrote.error || "",
+          };
+          wrote.ok
+            ? K(
+                n,
+                "✓ manifest 已合并写回媒体库根目录：" +
+                  target +
+                  "（" +
+                  merged.entries.length +
+                  " 条）",
+                "ok-t",
+              )
+            : K(n, "manifest 写回失败：" + (wrote.error || "未知错误"), "warn-t");
+        }
+      }
+    }
     return {
       ok: l,
       fail: c.length,
       skipped: a,
       msg: c.slice(0, 3).join("；"),
       failList: c,
+      manifest: manifestResult,
     };
   }
   async function _e(n, r) {
@@ -1715,13 +1764,14 @@
         "   .strm        播放索引，本身不含视频；播放器会去 OpenList 取流。\n" +
         "   .nfo         Jellyfin / Emby 能识别的元数据，尽量带 <tmdbid>，重扫不靠猜文件名。\n" +
         "   poster.jpg   封面。你本地已有的同名封面优先，本工具默认不覆盖。\n" +
-        "   manifest.json 上次生成记录。下次导入它，只生成新增和变化，不重刮全库。\n\n" +
+        "   manifest.json 上次生成记录。下次导入它，或从媒体库根目录直读；自动上传会把最新版写回根目录。\n\n" +
         "3. 进媒体库后\n" +
         "   在 Jellyfin / Emby 里对目标库点一次「扫描媒体库」或「刷新元数据」。\n" +
         "   工具不持有媒体服务器账号，也不会替你调用刷新 API。\n\n" +
         "4. 第二周加集\n" +
-        "   把上次的 manifest.json 导入，重新生成；已存在且源文件没变的条目会跳过。\n" +
-        "   想保留手工修过的 NFO / 海报，不要打开「覆盖模式」。\n\n" +
+        "   导入上次的 manifest.json，或点「从媒体库读取 manifest」，再点「预检差异」。\n" +
+        "   预检表可改片名 / 年份 / 季 / 集，也可逐条勾选跳过；确认后才生成。\n" +
+        "   默认只新增、不覆盖；要整部重做才打开「覆盖模式」，它会二次确认。\n\n" +
         "5. 换 OpenList 域名\n" +
         "   只改 openlistBase，重跑一次，旧 strm 里的路径会跟着换，不必全库重刮。\n\n" +
         "6. 安全\n" +
@@ -1801,32 +1851,136 @@
         r.readAsText(file)));
     });
   }
+  function applyImportedManifest(data, name) {
+    if (!data || !Array.isArray(data.entries))
+      throw new Error("不是影音入库箱 manifest：缺少 entries 数组");
+    importedManifest = data;
+    importedManifestName = name || "manifest.json";
+    activeManifest = null;
+    setManifestStatus(
+      "已导入 <b>" +
+        N(importedManifestName) +
+        "</b> · " +
+        data.entries.length +
+        " 条 · " +
+        N(data.version || "未知版本") +
+        " · " +
+        N(data.commit || "无 commit") +
+        '<br><span class="hint">重跑时只生成新增和源文件已变化的条目；已存在且未变化的跳过；manifest 里列出但本次没找到的只提示，不删除。自动上传开启时，最新 manifest 会写回媒体库根目录。</span>',
+    );
+    const clr = t("clearManifestBtn");
+    clr && (clr.style.display = "");
+  }
+  async function autoPreviewAfterManifest(label) {
+    label = label || "manifest 已导入";
+    if (D) {
+      setManifestStatus(
+        label + "。当前有任务在运行，完成后再点「预检差异（不生成）」查看变化。",
+      );
+      return;
+    }
+    if (!O(t("cloudDir").value)) {
+      setManifestStatus(
+        label +
+          "。已导入；选好视频目录后点「预检差异（不生成）」查看本次变化。",
+      );
+      return;
+    }
+    setManifestStatus(
+      label + "。正在按当前目录预检差异…（不会生成文件）",
+    );
+    try {
+      const r = await lt({ dryRun: true });
+      if (r && r.code === "DRY_RUN")
+        setManifestStatus(
+          label +
+            "。预检完成：" +
+            (r.count ? "将生成 " + r.count + " 条" : "没有需要生成的新集") +
+            "；未生成任何文件。",
+        );
+      else
+        setManifestStatus(
+          label + "。预检未完成，可点「预检差异（不生成）」重试。",
+        );
+    } catch (e) {
+      setManifestStatus(
+        label + "。预检失败：" + N(e.message || "未知错误"),
+        true,
+      );
+    }
+  }
   async function loadManifestFile(file) {
     try {
       const raw = await readTextFile(file),
         data = JSON.parse(String(raw).replace(/^\uFEFF/, ""));
-      if (!data || !Array.isArray(data.entries))
-        throw new Error("不是影音入库箱 manifest：缺少 entries 数组");
-      importedManifest = data;
-      importedManifestName = (file && file.name) || "manifest.json";
-      activeManifest = null;
-      setManifestStatus(
-        "已导入 <b>" +
-          N(importedManifestName) +
-          "</b> · " +
-          data.entries.length +
-          " 条 · " +
-          N(data.version || "未知版本") +
-          " · " +
-          N(data.commit || "无 commit") +
-          '<br><span class="hint">重跑时只生成新增和源文件已变化的条目；已存在且未变化的跳过；manifest 里列出但本次没找到的只提示，不删除。</span>',
-      );
-      const clr = t("clearManifestBtn");
-      clr && (clr.style.display = "");
+      applyImportedManifest(data, (file && file.name) || "manifest.json");
+      await autoPreviewAfterManifest("本地 manifest 已导入");
     } catch (err) {
       importedManifest = null;
       importedManifestName = "";
       setManifestStatus("导入失败：" + N(err.message), true);
+    }
+  }
+  async function readLibraryManifest(lib) {
+    const dir = O(lib);
+    if (!dir || "/" === dir) return { ok: false, missing: true, error: "未填媒体库目录" };
+    const res = await _e(dir, false);
+    if (!res.ok) return { ok: false, error: "读取目录失败：" + Ce(res) };
+    const file = (res.items || []).find(
+      (x) =>
+        !x.is_dir &&
+        String(x.name || "").toLowerCase() === e.MANIFEST_FILE.toLowerCase(),
+    );
+    if (!file)
+      return {
+        ok: false,
+        missing: true,
+        error: "媒体库根目录没有 " + e.MANIFEST_FILE,
+      };
+    const read = await vt(file, P(dir, file.name));
+    if (!read.ok) return { ok: false, error: "读取 manifest 失败：" + read.error };
+    try {
+      const text = new TextDecoder("utf-8").decode(read.buf),
+        data = JSON.parse(String(text).replace(/^\uFEFF/, ""));
+      if (!data || !Array.isArray(data.entries))
+        throw new Error("缺少 entries 数组");
+      return { ok: true, data, path: P(dir, file.name) };
+    } catch (err) {
+      return { ok: false, error: "解析 manifest 失败：" + err.message };
+    }
+  }
+  async function manifestForLibraryRoot(lib, manifest) {
+    const read = await readLibraryManifest(lib);
+    if (!read.ok) return read.missing ? manifest : null;
+    return {
+      ...manifest,
+      entries: mergeManifestEntries(read.data.entries, manifest.entries),
+    };
+  }
+  async function loadManifestFromLibrary() {
+    const lib = O(t("libDir").value);
+    if (!lib || "/" === lib)
+      return void setManifestStatus(
+        "先填写「② 保存到媒体库」的目录，才能从媒体库里读 manifest.json。",
+        true,
+      );
+    if (!(await ye()).ok)
+      return void setManifestStatus("OpenList 未连接：" + N(h), true);
+    setManifestStatus("正在读取 " + N(P(lib, e.MANIFEST_FILE)) + " …");
+    const res = await readLibraryManifest(lib);
+    if (!res.ok)
+      return void setManifestStatus(
+        res.error +
+          (res.missing
+            ? "。如果上次是手动解压 zip，manifest 在剧名文件夹里，请用「导入上次 manifest」选择它；本次开启自动上传后会写回媒体库根目录。"
+            : ""),
+        true,
+      );
+    try {
+      applyImportedManifest(res.data, res.path);
+      await autoPreviewAfterManifest("媒体库 manifest 已读取");
+    } catch (err) {
+      setManifestStatus("解析 manifest 失败：" + N(err.message), true);
     }
   }
   function clearImportedManifest() {
@@ -1834,56 +1988,257 @@
     importedManifestName = "";
     activeManifest = null;
     setManifestStatus(
-      "未导入：将按媒体库已有 strm 做增量对比。导入上次 zip 里的 manifest.json 后，可精确认出新增 / 改名 / 已删。",
+      "未导入：将按媒体库已有 strm 做增量对比。可导入上次 zip 里的 manifest.json，或从媒体库根目录直读；自动上传开启时最新 manifest 会写回根目录。",
     );
     const clr = t("clearManifestBtn");
     clr && (clr.style.display = "none");
     const inp = t("manifestFile");
     inp && (inp.value = "");
   }
+  const PF_STATUS = {
+    added: "新增",
+    changed: "变化重写",
+    new: "待生成",
+    skipped: "已跳过",
+  };
+  function preflightCsv(info) {
+    const rows = [["状态", "目标路径", "片名", "年份", "季", "集", "源文件"]];
+    (info.rows || []).forEach((r) =>
+      rows.push([
+        PF_STATUS[r.status] || r.status || "",
+        r.relativePath || r.name || "",
+        info.title || "",
+        info.year || "",
+        r.movie ? "" : r.season || "",
+        r.movie ? "" : r.episode || "",
+        r.source || "",
+      ]),
+    );
+    (info.deletedPaths || []).forEach((p) =>
+      rows.push(["manifest 有、本次没找到", p, info.title || "", "", "", "", ""]),
+    );
+    const csv = rows
+      .map((row) =>
+        row
+          .map((cell) => '"' + String(null == cell ? "" : cell).replace(/"/g, '""') + '"')
+          .join(","),
+      )
+      .join("\r\n");
+    return "\uFEFF" + csv;
+  }
+  function exportPreflightCsv(info) {
+    try {
+      const blob = new Blob([preflightCsv(info)], {
+          type: "text/csv;charset=utf-8",
+        }),
+        url = URL.createObjectURL(blob),
+        a = document.createElement("a");
+      ((a.href = url),
+        (a.download =
+          "preflight-" +
+          String(info.title || "library").replace(/[\\/:*?"<>|]/g, "_") +
+          ".csv"),
+        document.body.appendChild(a),
+        a.click(),
+        a.remove(),
+        setTimeout(() => URL.revokeObjectURL(url), 1200));
+    } catch (e) {
+      K(i, "导出 CSV 失败：" + (e.message || "未知错误"), "err-t");
+    }
+  }
+  function readPreflightEdits(info) {
+    const box = t("preflightBox");
+    if (!box) return null;
+    const val = (id) => {
+        const el = box.querySelector(id);
+        return el ? String(el.value || "").trim() : "";
+      },
+      rows = new Map();
+    box.querySelectorAll("tr[data-key]").forEach((tr) => {
+      const key = tr.getAttribute("data-key") || "",
+        epEl = tr.querySelector('[data-pf="ep"]'),
+        skipEl = tr.querySelector('[data-pf="skip"]');
+      rows.set(key, {
+        ep: epEl ? parseInt(epEl.value, 10) || 0 : 0,
+        skip: !!(skipEl && skipEl.checked),
+      });
+    });
+    return {
+      title: val("#pfTitle") || info.title || "",
+      year: val("#pfYear") || info.year || "",
+      season: val("#pfSeason") || info.season || "01",
+      rows,
+    };
+  }
+  function applyPreflightEdits(y, info, edits) {
+    if (!edits) return null;
+    const title = A(edits.title || info.title) || info.title,
+      year = String(edits.year || info.year || ""),
+      season = M(edits.season || info.season || "01");
+    let skipped = 0;
+    for (const [key, g] of [...y]) {
+      const row = (edits.rows && edits.rows.get(key)) || {};
+      if (row.skip) {
+        y.delete(key);
+        skipped++;
+        continue;
+      }
+      g.title = title;
+      if (g.movie) {
+        g.name = title + ".strm";
+        g.season = season;
+      } else {
+        const ep = row.ep > 0 ? row.ep : g.ep || 1,
+          suffix = (String(g.name).match(/(_\d+)?\.strm$/i) || [])[1] || "";
+        ((g.ep = ep),
+          (g.season = season),
+          (g.name = title + " S" + M(season) + "E" + M(ep) + suffix + ".strm"));
+      }
+    }
+    return { title, year, season, skipped };
+  }
   function renderPreflight(info) {
     const box = t("preflightBox");
     if (!box) return;
     lastPreflight = info;
-    const rows = [];
-    rows.push(
-      '<div class="pf-row"><b>' +
-        info.toGenerate +
-        "</b><span>本次将生成</span></div>",
-    );
-    rows.push(
-      '<div class="pf-row"><b>' +
-        info.skipped +
-        "</b><span>已存在且未变化，跳过</span></div>",
-    );
-    rows.push(
-      '<div class="pf-row"><b>' +
-        info.changed +
-        "</b><span>源文件已变化，重写</span></div>",
-    );
-    rows.push(
-      '<div class="pf-row"><b>' +
-        info.deleted +
-        "</b><span>manifest 里有、本次没找到（默认不动）</span></div>",
-    );
-    const warns = [];
+    const rows = info.rows || [],
+      canEdit = !!info.editable,
+      canExport = canEdit || !!info.dryRun,
+      statusLabel = (s) => PF_STATUS[s] || s || "",
+      warns = [];
     info.noYear &&
       warns.push(info.noYear + " 个文件名没解析出年份，将走标题兜底");
     info.autoN && warns.push(info.autoN + " 个没集号，已自动续号");
     info.dups && warns.push(info.dups + " 处重复集，已加 _2/_3 后缀");
     info.badNames &&
       warns.push(info.badNames + " 个文件名含可疑字符或过长，已清洗");
-    box.innerHTML =
-      '<div class="pf-head">生成前预检 <span class="hint">（只提示，不拦截）</span></div><div class="pf-grid">' +
-      rows.join("") +
+    const summary =
+      '<div class="pf-grid">' +
+      '<div class="pf-row"><b>' +
+      info.toGenerate +
+      "</b><span>本次将生成</span></div>" +
+      '<div class="pf-row"><b>' +
+      info.skipped +
+      "</b><span>已存在且未变化，跳过</span></div>" +
+      '<div class="pf-row"><b>' +
+      info.changed +
+      "</b><span>源文件已变化，重写</span></div>" +
+      '<div class="pf-row"><b>' +
+      info.deleted +
+      "</b><span>manifest 里有、本次没找到（默认不动）</span></div>" +
+      "</div>";
+    let html =
+      '<div class="pf-head">生成前预检 ' +
+      (info.dryRun
+        ? '<span class="hint">（仅预检，未生成任何文件）</span>'
+        : canEdit
+          ? '<span class="hint">（可改片名 / 年份 / 季 / 集；确认后才生成）</span>'
+          : '<span class="hint">（只提示）</span>') +
       "</div>" +
-      (warns.length
-        ? '<ul class="pf-warn">' +
-          warns.map((x) => "<li>" + N(x) + "</li>").join("") +
-          "</ul>"
-        : '<div class="pf-ok">没有发现需要人工确认的异常。</div>') +
-      '<div class="hint">想改片名/年份，先改云盘里的文件名再重跑；工具不会动源文件。</div>';
+      summary +
+      (canEdit
+        ? '<div class="pf-global">' +
+          '<label>片名<input id="pfTitle" type="text" value="' +
+          N(info.title || "") +
+          '"></label>' +
+          '<label>年份<input id="pfYear" type="text" inputmode="numeric" value="' +
+          N(info.year || "") +
+          '"></label>' +
+          '<label>季号<input id="pfSeason" type="text" inputmode="numeric" value="' +
+          N(info.season || "") +
+          '"></label>' +
+          "</div>" +
+          '<div class="hint">片名 / 年份 / 季号适用于本目录整部剧；集号可逐条改；取消勾选可跳过该条。改完点「确认生成」才会真正打包。</div>'
+        : "");
+    if (rows.length) {
+      html +=
+        '<div class="pf-scroll"><table class="pf-table"><thead><tr><th>状态</th><th>目标路径</th><th>集</th>' +
+        (canEdit ? "<th>跳过</th>" : "") +
+        "</tr></thead><tbody>";
+      rows.slice(0, 200).forEach((r) => {
+        html +=
+          '<tr data-key="' +
+          N(r.key) +
+          '"><td class="pf-st">' +
+          N(statusLabel(r.status)) +
+          '</td><td class="pf-path">' +
+          N(r.relativePath || r.name) +
+          "</td><td>" +
+          (r.movie
+            ? "电影"
+            : canEdit
+              ? '<input class="pf-num" data-pf="ep" type="text" inputmode="numeric" value="' +
+                N(r.episode || "") +
+                '">'
+              : N(r.episode || "")) +
+          "</td>" +
+          (canEdit
+            ? '<td><label class="pf-skip"><input type="checkbox" data-pf="skip">跳过</label></td>'
+            : "") +
+          "</tr>";
+      });
+      html += "</tbody></table></div>";
+      if (rows.length > 200)
+        html +=
+          '<div class="hint">仅列出前 200 条；其余 ' +
+          (rows.length - 200) +
+          " 条按默认规则生成，可导出 CSV 查看全量。</div>";
+    }
+    if (warns.length)
+      html +=
+        '<ul class="pf-warn">' +
+        warns.map((x) => "<li>" + N(x) + "</li>").join("") +
+        "</ul>";
+    else if (!rows.length)
+      html += '<div class="pf-ok">没有发现需要人工确认的异常。</div>';
+    if (info.deletedPaths && info.deletedPaths.length)
+      html +=
+        '<div class="pf-deleted"><b>manifest 里有、本次没找到（默认保留不动）：</b><ul>' +
+        info.deletedPaths
+          .slice(0, 8)
+          .map((p) => "<li>" + N(p) + "</li>")
+          .join("") +
+        "</ul></div>";
+    if (canEdit)
+      html +=
+        '<div class="pf-actions"><button type="button" class="btn-primary green" id="pfConfirm">确认生成</button>' +
+        '<button type="button" class="mbtn" id="pfCancel">取消</button>' +
+        '<button type="button" class="btn-text" id="pfCsv" style="margin:0">导出 CSV</button></div>';
+    else if (info.dryRun)
+      html +=
+        '<div class="pf-actions"><button type="button" class="btn-text" id="pfCsv" style="margin:0">导出 CSV</button></div>' +
+        '<div class="hint">这是预检结果，未写入任何文件。点「③ 开始生成」时会再让你确认一次。</div>';
+    box.innerHTML = html;
     box.style.display = "";
+    if (canExport) {
+      const csv = t("pfCsv");
+      csv && (csv.onclick = () => exportPreflightCsv(info));
+    }
+    if (canEdit) {
+      const confirm = t("pfConfirm"),
+        cancel = t("pfCancel");
+      confirm &&
+        (confirm.onclick = () => {
+          if (!preflightResolver) return;
+          const payload = readPreflightEdits(info),
+            resolve = preflightResolver;
+          preflightResolver = null;
+          box.querySelector(".pf-head").innerHTML =
+            '生成前预检 <span class="hint">（已确认，正在生成…）</span>';
+          const run = t("runStrmBtn");
+          run && (run.textContent = "正在生成…");
+          resolve(payload);
+        });
+      cancel &&
+        (cancel.onclick = () => {
+          const resolve = preflightResolver;
+          preflightResolver = null;
+          box.style.display = "none";
+          const run = t("runStrmBtn");
+          run && ((run.disabled = !1), (run.textContent = ut()));
+          resolve && resolve(null);
+        });
+    }
   }
 
   const Ye = { strmDl: [], subDl: [] };
@@ -2260,9 +2615,9 @@
       o = !!n.internal;
     if (((it = null), D && !o)) return { ok: !1, code: "BUSY" };
     o || (D = !0);
-    const a = t("runStrmBtn");
-    ((a.disabled = !0),
-      (a.textContent = "正在生成…"),
+    const runBtn = t("runStrmBtn");
+    ((runBtn.disabled = !0),
+      (runBtn.textContent = n.dryRun ? "正在预检…" : "正在生成…"),
       Xe("strmDl"),
       (t("strmLog").innerHTML = ""));
     const s = t("uploadWarn");
@@ -2274,11 +2629,44 @@
         ((t("playHost").value = o), K(i, "① 连接 OpenList …"), !(await ye()).ok)
       )
         return (r || ke(), { ok: !1, code: "CONN_FAIL", reason: h });
+      const libRoot = O(t("libDir").value);
+      if (
+        !importedManifest &&
+        libRoot &&
+        t("incremental") &&
+        t("incremental").checked
+      ) {
+        const rootManifest = await readLibraryManifest(libRoot);
+        if (rootManifest.ok) {
+          importedManifest = rootManifest.data;
+          importedManifestName = rootManifest.path;
+          activeManifest = null;
+          setManifestStatus(
+            "已自动读取媒体库 manifest <b>" +
+              N(rootManifest.path) +
+              "</b> · " +
+              rootManifest.data.entries.length +
+              " 条。本次只生成新增和源文件已变化的条目。",
+          );
+          K(
+            i,
+            "④ 自动读取媒体库 manifest：" + rootManifest.path,
+            "ok-t",
+          );
+        } else if (!rootManifest.missing)
+          K(
+            i,
+            "自动读取媒体库 manifest 失败：" +
+              rootManifest.error +
+              "；本次按已有 strm 对比",
+            "warn-t",
+          );
+      }
       const a = O(t("cloudDir").value);
       let s = t("namePrefix").value.trim(),
         l = s ? A(s) : "",
         c = at();
-      const d = (k && k[0] && k[0].name) || "";
+      let d = (k && k[0] && k[0].name) || "";
       if (
         (c ||
           ((c = (a && ue(a)) || (d && me(d, a).season) || "01"),
@@ -2367,9 +2755,9 @@
       }
       const b = p[0].vids;
       K(i, "③ 解析集号并生成（无集号自动编号）…");
-      const { groups: y, dups: v, autoN: w, isMovie: S } = gt(b, a, l, c),
-        E = ht(t("libDir").value, l, S ? "" : c),
-        x = b.filter((e) => !e.sign).length;
+      const { groups: y, dups: v, autoN: w, isMovie: S } = gt(b, a, l, c);
+      let E = ht(t("libDir").value, l, S ? "" : c);
+      const x = b.filter((e) => !e.sign).length;
       if (
         (w &&
           K(
@@ -2419,6 +2807,7 @@
           unchanged: 0,
           deleted: 0,
           deletedPaths: [],
+          status: {},
         };
       const relForGroup = (g) =>
         manifestRelPath(
@@ -2446,6 +2835,7 @@
           current.add(rel);
           if (!old) {
             manifestDiff.added++;
+            manifestDiff.status[key] = "added";
             continue;
           }
           const oldSrc = old.source || {},
@@ -2458,7 +2848,11 @@
             y.delete(key);
             _++;
             manifestDiff.unchanged++;
-          } else manifestDiff.changed++;
+            manifestDiff.status[key] = "skipped";
+          } else {
+            manifestDiff.changed++;
+            manifestDiff.status[key] = "changed";
+          }
         }
         const prefix = manifestRelPath(l) + "/";
         manifestDiff.deletedPaths = (importedManifest.entries || [])
@@ -2516,7 +2910,17 @@
         } else
           ((D = "未配置媒体库目录，无法定位已有 strm，本次按全量生成"),
             K(i, "增量跳过：" + D, "warn-t"));
-      renderPreflight({
+      const pfRows = [...y.entries()].map(([key, g]) => ({
+        key,
+        name: g.name,
+        episode: g.ep || 0,
+        season: g.season || c,
+        movie: !!g.movie,
+        source: (g.f && g.f.name) || "",
+        relativePath: relForGroup(g),
+        status: manifestDiff.status[key] || (importedManifest ? "added" : "new"),
+      }));
+      const pfInfo = {
         toGenerate: y.size,
         skipped: _,
         changed: manifestDiff.changed,
@@ -2525,7 +2929,28 @@
         autoN: w,
         dups: v.length,
         badNames: b.filter((x) => /[\\/:*?"<>|\x00-\x1f]/.test(x.name)).length,
-      });
+        rows: pfRows,
+        deletedPaths: manifestDiff.deletedPaths,
+        title: l,
+        year: $t(d || l),
+        season: c,
+        dryRun: !!n.dryRun,
+        editable: !n.dryRun,
+      };
+      renderPreflight(pfInfo);
+      if (n.dryRun) {
+        ((runBtn.disabled = !1), (runBtn.textContent = ut()));
+        K(
+          i,
+          y.size
+            ? "✓ 预检完成：本次将生成 " +
+                y.size +
+                " 条；未写入任何文件。点「③ 开始生成」再确认。"
+            : "✓ 预检完成：按 manifest / 媒体库对比，没有需要生成的新集。",
+          "ok-t",
+        );
+        return { ok: !0, code: "DRY_RUN", count: y.size, diff: manifestDiff };
+      }
       if (!y.size)
         return (
           re(
@@ -2540,6 +2965,42 @@
                   : "")
               : "视频文件名里没识别出集号。",
             [ce("NO_NEW", {}), { label: "知道了" }],
+          ),
+          { ok: !1, code: "NO_NEW", ctx: {} }
+        );
+      const edits = await new Promise((resolve) => {
+        preflightResolver = resolve;
+      });
+      if (!edits)
+        return (
+          (runBtn.disabled = !1),
+          (runBtn.textContent = ut()),
+          { ok: !1, code: "CANCELLED" }
+        );
+      const applied = applyPreflightEdits(y, pfInfo, edits);
+      if (!applied)
+        return (
+          (runBtn.disabled = !1),
+          (runBtn.textContent = ut()),
+          { ok: !1, code: "CANCELLED" }
+        );
+      ((l = applied.title || l),
+        (d = applied.year || d),
+        (c = applied.season || c),
+        (E = ht(t("libDir").value, l, S ? "" : c)),
+        (runBtn.textContent = "正在生成…"));
+      if (applied.skipped)
+        ((_ += applied.skipped),
+          K(i, "预检中跳过 " + applied.skipped + " 条，本次不生成", "warn-t"));
+      if (!y.size)
+        return (
+          (runBtn.disabled = !1),
+          (runBtn.textContent = ut()),
+          re(
+            "ok",
+            "没有要生成的文件",
+            "你在预检里跳过了所有条目，本次没有生成任何文件。",
+            [{ label: "知道了" }],
           ),
           { ok: !1, code: "NO_NEW", ctx: {} }
         );
@@ -2563,7 +3024,7 @@
           : T,
         {
           openlistBase: o,
-          outputRoot: E || O(t("libDir").value),
+          outputRoot: O(t("libDir").value) || E,
           tmdbUsed: !!Ut(),
           generated: T.length,
           skipped: _,
@@ -2598,7 +3059,17 @@
       }),
         Xe("strmDl"),
         Ze(
-          Ve([...T, manifestFileOf(manifest), packReadmeFile()]),
+          Ve([
+            ...T.map((e) => ({
+              name:
+                (e.movie ? l : l + "/Season " + M(e.season || c)) +
+                "/" +
+                e.name,
+              content: e.content,
+            })),
+            manifestFileOf(manifest),
+            packReadmeFile(),
+          ]),
           "strm_" + l + ".zip",
           "strmDl",
           "↓ 下载 strm 包（" + T.length + " 个 strm + manifest.json）",
@@ -2615,8 +3086,9 @@
               prefix: l,
             })),
             i,
+            manifest,
           );
-        ((L = { ok: n.ok, fail: n.fail, msg: n.msg }),
+        ((L = { ok: n.ok, fail: n.fail, msg: n.msg, manifest: n.manifest }),
           !n.ok &&
             n.fail &&
             K(i, "  失败明细：" + (n.failList || []).join(" | "), "err-t"),
@@ -2640,6 +3112,9 @@
           "），下次导入即可精确 diff" +
           (manifestDiff.deleted
             ? "；另有 " + manifestDiff.deleted + " 条旧条目默认保留未删"
+            : "") +
+          (L && L.manifest && L.manifest.ok
+            ? "；已写回媒体库根目录 manifest.json，下次可直读"
             : "");
       if (
         (E
@@ -2716,7 +3191,7 @@
         { ok: !1, code: "EXCEPTION", reason: e.message }
       );
     } finally {
-      ((a.disabled = !1), (a.textContent = ut()), o || (D = !1));
+      ((runBtn.disabled = !1), (runBtn.textContent = ut()), o || (D = !1));
     }
   }
   function ct(e, t) {
@@ -2779,6 +3254,19 @@
       ? "③ 开始生成（播放文件 + 封面）"
       : "③ 只生成播放文件";
   }
+  function syncRerunMode() {
+    const ow = t("overwriteMode"),
+      badge = t("rerunBadge");
+    if (!ow || !badge) return;
+    const on =
+      !!(t("metaOverwrite") && t("metaOverwrite").checked) ||
+      !!(t("incremental") && !t("incremental").checked);
+    ow.checked = on;
+    badge.textContent = on
+      ? "覆盖模式：会重写已有 strm / NFO / 海报"
+      : "只新增、不覆盖";
+    badge.classList.toggle("warn", on);
+  }
   function mt() {
     const e = t("autoModeNote");
     if (!e) return;
@@ -2799,6 +3287,7 @@
       e &&
       t("metaOverwrite") &&
       t("metaOverwrite").checked &&
+      !overwriteModeConfirmed &&
       !window.confirm(
         "你勾选了「覆盖已有 NFO / 海报」。这会改写媒体库里已有的同名文件，本地手工修过的内容会丢失。继续吗？",
       )
@@ -3434,8 +3923,8 @@
     it && (it.manifest = manifest);
     let S = null;
     if (y) {
-      const e = await xe(u, a);
-      ((S = { ok: e.ok, fail: e.fail, msg: e.msg }),
+      const e = await xe(u, a, manifest);
+      ((S = { ok: e.ok, fail: e.fail, msg: e.msg, manifest: e.manifest }),
         !e.ok &&
           e.fail &&
           K(a, "  失败明细：" + (e.failList || []).join(" | "), "err-t"),
@@ -3792,7 +4281,10 @@
         f = t("manifestFile"),
         c = t("clearManifestBtn"),
         s = t("tmdbSession"),
-        cl = t("clearLocalBtn");
+        cl = t("clearLocalBtn"),
+        libM = t("libraryManifestBtn"),
+        pre = t("preflightBtn"),
+        ow = t("overwriteMode");
       b &&
         f &&
         (b.addEventListener("click", () => f.click()),
@@ -3802,6 +4294,41 @@
           f.value = "";
         }));
       c && c.addEventListener("click", () => clearImportedManifest());
+      libM &&
+        libM.addEventListener("click", async () => {
+          if (D) return;
+          await loadManifestFromLibrary();
+        });
+      pre &&
+        pre.addEventListener("click", () => {
+          if (D) return;
+          lt({ dryRun: true });
+        });
+      ow &&
+        ow.addEventListener("change", () => {
+          if (ow.checked) {
+            if (
+              !window.confirm(
+                "覆盖模式会重写媒体库里已有的同画 strm / NFO / 海报，本地手工改过的内容会丢失。\n\n只在整部重做时打开。继续吗？",
+              )
+            ) {
+              ((ow.checked = !1), (overwriteModeConfirmed = !1), syncRerunMode());
+              return;
+            }
+            overwriteModeConfirmed = true;
+          } else overwriteModeConfirmed = false;
+          t("incremental") && (t("incremental").checked = !ow.checked);
+          t("metaOverwrite") && (t("metaOverwrite").checked = ow.checked);
+          syncRerunMode();
+        });
+      ["incremental", "metaOverwrite"].forEach((id) => {
+        const el = t(id);
+        el &&
+          el.addEventListener("change", () => {
+            overwriteModeConfirmed = !1;
+            syncRerunMode();
+          });
+      });
       s &&
         s.addEventListener("change", () => {
           if (s.checked) {
@@ -5833,6 +6360,7 @@
     })(),
     (t("libDir2").value = t("libDir").value),
     (t("baseUrl2").value = t("apiBase").value),
+    syncRerunMode(),
     (function () {
       if (t("tmdbSession") && t("tmdbSession").checked) {
         t("tmdbKey") && (t("tmdbKey").value = "");
@@ -5854,7 +6382,7 @@
             ? (cap.textContent = "本浏览器：将退回 zip 下载")
             : (cap.textContent = "本浏览器：只能 zip 下载"));
       setManifestStatus(
-        "未导入：将按媒体库已有 strm 做增量对比。导入上次 zip 里的 manifest.json 后，可精确认出新增 / 改名 / 已删。",
+        "未导入：将按媒体库已有 strm 做增量对比。可导入上次 zip 里的 manifest.json，或从媒体库根目录直读；自动上传开启时最新 manifest 会写回根目录。",
       );
     })(),
     st(),

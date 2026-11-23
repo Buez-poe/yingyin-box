@@ -55,8 +55,8 @@
       "Only missing episodes: compare existing .strm files in the library and skip them (library path required)",
     "默认开启。按剧名 + 季号在媒体库里比对同名 strm，只打包新增集；未填媒体库目录时自动降级为全量生成。整部重做时请关掉。":
       "On by default. Compares same-name .strm files by title + season in the library and packages only new episodes. If no library path is set, it falls back to a full run. Turn off to rebuild the whole series.",
-    "默认开启。导入上次 manifest 时按 manifest 精确对比新增 / 变化 / 未变化；未导入时按剧名 + 季号比对媒体库里已有的 strm。整部重做时请关掉。":
-      "On by default. With an imported manifest it compares additions / changes / unchanged entries precisely; without one it falls back to matching existing .strm files by title + season. Turn off to rebuild the whole series.",
+    "默认开启。导入上次 manifest 时按 manifest 精确对比新增 / 变化 / 未变化；未导入时按剧名 + 季号比对媒体库里已有的 strm。整部重做时请关掉。通常用上方「覆盖模式」统一切换，不必直接改这里。":
+      "On by default. With an imported manifest it compares additions / changes / unchanged entries precisely; without one it falls back to matching existing .strm files by title + season. Turn off to rebuild the whole series. Use the “Overwrite mode” switch above instead of changing this directly.",
     "生成后直接上传到媒体库（免下载解压）":
       "Upload directly to the media library after generation (no download/unzip)",
     "通过 OpenList 上传接口把 strm 写进上面的目标目录，写完只需在 Jellyfin/Emby 扫库。需目标目录有效且账号有写权限；失败会自动保留 zip 下载兜底。":
@@ -329,8 +329,8 @@
     "只新增、不覆盖": "Only add, never overwrite",
     "导入上次 manifest（可选）": "Import previous manifest (optional)",
     清除已导入: "Clear imported",
-    "未导入：将按媒体库已有 strm 做增量对比。导入上次 zip 里的 manifest.json 后，可精确认出新增 / 改名 / 已删。":
-      "Not imported: compares against existing .strm files in the library. Import manifest.json from the last zip to detect additions / renames / deletions precisely.",
+    "未导入：将按媒体库已有 strm 做增量对比。可导入上次 zip 里的 manifest.json，或从媒体库根目录直读；自动上传开启时最新 manifest 会写回根目录。":
+      "Not imported: compares against existing .strm files. Import manifest.json from the last zip, or read it directly from the library root; with auto-upload on, the latest manifest is written back to the root.",
     清除全部本地数据: "Clear all local data",
     "仅本次会话使用 TMDB Key（不写 localStorage；刷新后需重填）":
       "Use TMDB key for this session only (not written to localStorage; re-enter after refresh)",
@@ -340,6 +340,21 @@
       "Do not embed OpenList signatures in .strm (write only the /d/ path template; change one line when the domain changes)",
     "覆盖已有 NFO / 海报（默认关闭；打开会二次确认）":
       "Overwrite existing NFO / posters (off by default; asks for confirmation)",
+    "从媒体库读取 manifest": "Read manifest from library",
+    "预检差异（不生成）": "Preview diff (no generation)",
+    "覆盖模式（会重写已有 strm / NFO / 海报）":
+      "Overwrite mode (rewrites existing .strm / NFO / posters)",
+    "覆盖模式：会重写已有 strm / NFO / 海报":
+      "Overwrite mode: rewrites existing .strm / NFO / posters",
+    生成前预检: "Preflight",
+    确认生成: "Confirm and generate",
+    取消: "Cancel",
+    "导出 CSV": "Export CSV",
+    片名: "Title",
+    年份: "Year",
+    季号: "Season",
+    跳过: "Skip",
+    "仅预检，未生成任何文件": "Preview only; no files written",
     "离线冻结承诺：": "Offline freeze promise: ",
     "数据边界：": "Data boundary: ",
     "威胁模型一页纸（凭据从哪来 / 存哪 / 活多久 / 怎么清）":
