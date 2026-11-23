@@ -6,8 +6,10 @@
 
 - `manifest.json` inside every zip: version, commit, build date, OpenList base, output root, per-entry relative path, source size/mtime, title/year/season/episode, tmdbid, URL template, cover source.
 - Import a previous manifest and diff: new entries generated, changed entries rewritten, unchanged skipped, missing entries listed but not deleted by default.
-- Default "only add, never overwrite": existing local `poster.jpg`, hand-edited NFO and artwork are skipped; overwrite requires an explicit switch plus confirmation.
-- Preflight report before generation: missing year, auto-numbering, duplicate episodes, suspicious characters, entries that would be skipped or rewritten.
+- Read the root `manifest.json` straight from the media-library folder, or auto-read it before a re-run when auto-upload is on.
+- Editable preflight before generation: titles, years, seasons and episode numbers can be corrected row by row; any row can be skipped; CSV export includes the full row set.
+- Default "only add, never overwrite": existing local `poster.jpg`, hand-edited NFO and artwork are skipped; overwrite requires an explicit switch plus a second confirmation.
+- Write-back after direct upload: the manifest is written to the library root only when every strm upload succeeds, and it merges with the existing root manifest instead of replacing it.
 - Browser capability badge on first screen: direct folder write / zip fallback / zip only.
 - Session-only TMDB key mode; "clear all local data"; exported config header states version, commit and "no credentials".
 - strm URL templates with `openlistBase` replacement; warning and optional stripping for `sign=` / `token=` / `pwd=`.
@@ -18,6 +20,8 @@
 
 - NFO now writes `<tmdbid>` when available, so a later re-scan does not fall back to filename guessing.
 - Batch zip also carries `manifest.json`.
+- Single-file and batch zips now keep the `片名/Season xx/` hierarchy; earlier single-file zips flattened strm files into the zip root.
+- A re-run in add-only mode first reads the root manifest when present, then shows the diff; overwrite mode does not auto-read, so an explicit overwrite is not skipped by stale state.
 - Cover priority: local same-name image > TMDB > generated title cover.
 - Website primary CTA now opens the online app at `/app.html`; the full pack zip is a secondary offline/download option.
 
@@ -32,9 +36,9 @@
 
 ### Assets
 
-- `yingyin-box-v6.0.html` — 196,090 bytes — SHA-256 `c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611`
-- `app.html` (online copy) — 196,090 bytes — same SHA-256
-- `yingyin-box-v6.0.zip` — 77,528 bytes — SHA-256 `25a26e4744288f1c1c9fc85b04f8646567e9682a54adca4c6844714b65d8878d`
+- `yingyin-box-v6.0.html` — 210,235 bytes — SHA-256 `1a84df21bf287213a3f46e6da271309a2896393dc329467b741cd9a147f48384`
+- `app.html` (online copy) — 210,235 bytes — same SHA-256
+- `yingyin-box-v6.0.zip` — 82,590 bytes — SHA-256 `9eecb9dc96addb6c14af8257b5c6c1a0422ce13fb60d7aba0d90b95ca8b0b182`
 
 ## v5.7 — 2026-11-22
 

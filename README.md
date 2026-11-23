@@ -2,7 +2,7 @@
 
 **A local-first, single-file media-library ingester for OpenList → Jellyfin / Emby.**
 
-Yingyin Box turns a cloud-drive folder into a clean, player-ready media library: `.strm` play files, Jellyfin/Emby-compatible NFO metadata, posters, season artwork, and renamed subtitles. It runs as one HTML file in your browser — no installer, no hosted account, and no author-side copy of your videos. v6.0 adds a `manifest.json` inside every zip so the next week's re-run can diff and generate only what changed.
+Yingyin Box turns a cloud-drive folder into a clean, player-ready media library: `.strm` play files, Jellyfin/Emby-compatible NFO metadata, posters, season artwork, and renamed subtitles. It runs as one HTML file in your browser — no installer, no hosted account, and no author-side copy of your videos. v6.0 adds a `manifest.json` inside every zip so the next week's re-run can diff and generate only what changed. The manifest can also be read straight from the library root, and an editable preflight sits between the diff and the actual write.
 
 [中文说明](README.zh-CN.md) · [Website](https://yingyin-box-site.pages.dev/) · [Releases](../../releases)
 
@@ -17,9 +17,10 @@ Yingyin Box turns a cloud-drive folder into a clean, player-ready media library:
 - **Create a local fallback cover** when no poster is available, so the library never shows a blank tile.
 - **Rename subtitles** to match the video, or keep the original file name.
 - **Package or upload** the result: download a zip, or write directly into your media-library folder.
-- **Re-run without rebuilding the whole library:** every zip contains `manifest.json`; import it next time to generate only new or changed entries.
-- **Never overwrite by default:** local `poster.jpg`, hand-edited NFO and existing artwork are skipped unless you explicitly enable overwrite.
-- **Carry state with the library:** the manifest travels with the unzipped folder, so clearing browser storage or changing computers does not lose the diff baseline.
+- **Re-run without rebuilding the whole library:** every zip contains `manifest.json`; import it next time, or read it straight from the library root after auto-upload has written it back.
+- **Edit before you write:** the preflight table shows additions, changed entries, skipped entries and missing old entries; titles, years, seasons and episode numbers can be corrected row by row, and rows can be skipped before generating.
+- **Never overwrite by default:** local `poster.jpg`, hand-edited NFO and existing artwork are skipped unless you explicitly enable overwrite mode and confirm a second time.
+- **Carry state with the library:** the manifest travels with the unzipped folder, so clearing browser storage or changing computers does not lose the diff baseline. When uploading directly, only a fully successful strm upload writes the manifest back, and it merges with the existing root manifest instead of replacing it.
 - **Switch the UI** between English and Chinese from the top-right corner. Chinese remains the default.
 
 ![Advanced settings in English](docs/screenshots/app-advanced-en.png)
@@ -42,9 +43,9 @@ The app itself has **no business backend that receives videos, keys or OpenList 
 2. **Run** it in Chrome or Edge. There is no install step.
 3. **Choose a source**: enter your OpenList URL and credentials, or use the local folder picker.
 4. **Set the media-library path**, for example `/media/tv` or `/media/movies`. This is the destination path inside the generated zip, not an upload address.
-5. **Optional:** import the `manifest.json` from your previous zip to diff against the last run.
+5. **Optional:** import the `manifest.json` from your previous zip, or use **Read manifest from library** once auto-upload has written it to the library root. Then preview the diff.
 6. **Optional:** add a TMDB v3 API key or v4 access token for richer metadata and official artwork.
-7. **Generate** and unzip the result into your Jellyfin/Emby library. The zip contains `manifest.json` at its root.
+7. **Generate:** review the editable preflight, confirm, then unzip the result into your Jellyfin/Emby library. The zip contains `manifest.json` at its root.
 
 If your browser cannot write directly to a local folder, the app falls back to a zip download. The generated folder structure still works the same way.
 
@@ -65,9 +66,9 @@ The build injects the commit into the page footer and into `manifest.json`, then
 
 | Package | Size | SHA-256 |
 | --- | --- | --- |
-| Web app (`yingyin-box-v6.0.html`) | 196,090 bytes (191 KB) | `c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611` |
-| Online app (`app.html`) | identical bytes | `c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611` |
-| Full pack (`yingyin-box-v6.0.zip`) | 77,528 bytes (76 KB) | `25a26e4744288f1c1c9fc85b04f8646567e9682a54adca4c6844714b65d8878d` |
+| Web app (`yingyin-box-v6.0.html`) | 210,235 bytes (205 KB) | `1a84df21bf287213a3f46e6da271309a2896393dc329467b741cd9a147f48384` |
+| Online app (`app.html`) | identical bytes | `1a84df21bf287213a3f46e6da271309a2896393dc329467b741cd9a147f48384` |
+| Full pack (`yingyin-box-v6.0.zip`) | 82,590 bytes (81 KB) | `9eecb9dc96addb6c14af8257b5c6c1a0422ce13fb60d7aba0d90b95ca8b0b182` |
 
 `downloads/yingyin-box-v6.0-offline-archive.zip` gathers the app, full pack, manifest, signature, public key and verification docs in site layout. Its size and SHA-256 are listed in the root `SHA256SUMS` rather than inside the archive, so the archive does not have to contain its own hash.
 

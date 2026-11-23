@@ -495,6 +495,10 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
     </div>
     <div class="callout">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+      <div><b>第二周才见真章。</b> 加集、改名、删片时不用整库重做：导入上次 manifest，或直接从媒体库根目录读；先看差异预检，可逐条改片名 / 年份 / 季 / 集、勾选跳过。默认只新增、不覆盖，手工换过的海报和 NFO 原样保留；只有显式打开「覆盖模式」并二次确认，才会重写已有文件。</div>
+    </div>
+    <div class="callout">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
       <div><b>没有 TMDB Key 也能用。</b> 只生成基础影片信息和本地封面；填了 Key 才会多出简介、评分和官方海报。第一次用，建议先不填 Key 试一遍。</div>
     </div>
   </section>
@@ -505,17 +509,17 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
       <div>
         <div class="kicker">使用</div>
         <h2>影音入库箱 v6.0</h2>
-        <p class="download-lede">不用下载：点一下就在浏览器里打开，和官网同一个网址，不需要安装任何东西。想离线保存、拿使用说明或 NFO 示例，再下载完整包。每个生成的 zip 内含 manifest.json，第二周加集后导入即可只生成变化。</p>
+        <p class="download-lede">不用下载：点一下就在浏览器里打开，和官网同一个网址，不需要安装任何东西。想离线保存、拿使用说明或 NFO 示例，再下载完整包。每次生成的 zip 都内含 manifest.json；第二周加集时，导入它或直接从媒体库根目录读，先预检差异再生成，默认只新增、不覆盖。</p>
         <div class="download-actions">
           <a class="btn btn-light" href="/app.html" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
             打开在线版 v6.0
           </a>
-          <a class="btn btn-outline-light" href="downloads/yingyin-box-v6.0.zip" download="影音入库箱 v6.0.zip">下载完整包 <span style="font-weight:500;opacity:.7">75 KB</span></a>
+          <a class="btn btn-outline-light" href="downloads/yingyin-box-v6.0.zip" download="影音入库箱 v6.0.zip">下载完整包 <span style="font-weight:500;opacity:.7">81 KB</span></a>
         </div>
         <p class="download-hint">提示：在线版页面是 https。如果你的 OpenList 是本地 http://127.0.0.1:5244 或内网 http://192.168.x.x，浏览器会按混合内容拦截，这种情况请用“下载完整包”里的本地文件打开。</p>
         <div class="download-meta">
-          <span>更新：2026-11-23</span><span>在线版 / 离线版：同一构建 <a href="https://gitee.com/a-splash-of-water/yingyin-box/commit/5ab422164c54" target="_blank" rel="noopener"><code>5ab422164c54</code></a></span>
+          <span>更新：2026-11-23</span><span>在线版 / 离线版：同一构建 <a href="https://gitee.com/a-splash-of-water/yingyin-box/commit/fca2a7592b20" target="_blank" rel="noopener"><code>fca2a7592b20</code></a></span>
         </div>
       </div>
       <div class="download-aside">
@@ -525,7 +529,8 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>使用说明（含常见故障排查）</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>4 个 NFO 示例，可直接对照</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>单集 NFO、海报、本地封面兜底</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>manifest.json：下次导入，只生成新增和变化</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>生成前预检：差异、异常、跳过项都可逐条改</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>manifest.json：随媒体库走，可直读、可自动写回</li>
         </ul>
         <div class="download-note">当前免费。没有强制关注、没有加群、没有隐藏收费。下载后如果浏览器提示风险，可以先查看源码或自行杀毒扫描。<b>已下载的离线 HTML 永久可用、永不回连、永不因版本更新失效；若未来增加付费服务，已发布版本功能不锁。</b></div>
       </div>
@@ -533,9 +538,9 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
     <details class="tech">
       <summary>技术验证信息（给懂技术的朋友）</summary>
       <div class="tech-body">
-        <div>完整包 SHA-256：<code>25a26e4744288f1c1c9fc85b04f8646567e9682a54adca4c6844714b65d8878d</code></div>
-        <div>在线版 <a href="/app.html" target="_blank" rel="noopener">/app.html</a> 与下载的 HTML 是同一文件，SHA-256：<code>c51c7514c4a0b07f6063e23dc69badcc2952508627655288ee73e7d4bb058611</code></div>
-        <div>构建来源：<a href="https://gitee.com/a-splash-of-water/yingyin-box/commit/5ab422164c54" target="_blank" rel="noopener"><code>5ab422164c54</code></a> · 源码构建脚本 <code>tools/build.mjs</code> · 版本历史见 <a href="https://gitee.com/a-splash-of-water/yingyin-box/blob/master/CHANGELOG.md" target="_blank" rel="noopener">CHANGELOG</a> · 签名说明见 <a href="https://gitee.com/a-splash-of-water/yingyin-box/blob/master/docs/VERIFY.md" target="_blank" rel="noopener">VERIFY</a></div>
+        <div>完整包 SHA-256：<code>9eecb9dc96addb6c14af8257b5c6c1a0422ce13fb60d7aba0d90b95ca8b0b182</code></div>
+        <div>在线版 <a href="/app.html" target="_blank" rel="noopener">/app.html</a> 与下载的 HTML 是同一文件，SHA-256：<code>1a84df21bf287213a3f46e6da271309a2896393dc329467b741cd9a147f48384</code></div>
+        <div>构建来源：<a href="https://gitee.com/a-splash-of-water/yingyin-box/commit/fca2a7592b20" target="_blank" rel="noopener"><code>fca2a7592b20</code></a> · 源码构建脚本 <code>tools/build.mjs</code> · 版本历史见 <a href="https://gitee.com/a-splash-of-water/yingyin-box/blob/master/CHANGELOG.md" target="_blank" rel="noopener">CHANGELOG</a> · 签名说明见 <a href="https://gitee.com/a-splash-of-water/yingyin-box/blob/master/docs/VERIFY.md" target="_blank" rel="noopener">VERIFY</a></div>
         <div>校验和文件：<a href="/SHA256SUMS" target="_blank" rel="noopener">/SHA256SUMS</a> · 许可证：MIT · 本页面不加载第三方脚本，不接统计工具。</div>
         <div>整站清单：<a href="/SITE-SHA256SUMS" target="_blank" rel="noopener">/SITE-SHA256SUMS</a> · 整站签名：<a href="/SITE-SHA256SUMS.sig" target="_blank" rel="noopener">/SITE-SHA256SUMS.sig</a> · 公钥：<a href="/signing-key.pub" target="_blank" rel="noopener">/signing-key.pub</a> · 验签说明：<a href="/docs/SITE-SIGNATURE.md" target="_blank" rel="noopener">/docs/SITE-SIGNATURE.md</a></div>
         <div>整站签名命名空间 <code>yingyin-box-SITE-SHA256SUMS</code> · 签名者 <code>a-splash-of-water</code> · 公钥指纹 <code>SHA256:5HIRWZfB7RppTD0S8S1P6rwPof2FWwS2dykAWOO93xU</code></div>
@@ -587,7 +592,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
       <b>OpenList 账号密码：</b>你手动填入 → 只在当前页面内存 → 刷新即失效 → 关闭页面即可。<br>
       <b>OpenList token：</b>登录后由 OpenList 返回 → 只在内存 → 刷新或改地址后失效 → 重新连接即可。<br>
       <b>生成出的 strm：</b>只含 /d/ 路径模板与可选签名，不含账号密码 → 会写进 zip → 含 sign= / token= / pwd= 的包请勿外传。<br>
-      <b>manifest.json：</b>含路径、标题、年份、TMDB ID、封面来源，不含凭据 → 随 zip 走 → 下次导入用于 diff。</p>
+      <b>manifest.json：</b>含路径、标题、年份、TMDB ID、封面来源，不含凭据 → 随 zip 走，自动上传时写回媒体库根目录 → 下次直读或导入，用于只新增 / 变化重写的 diff。</p>
     </details>
     <div class="anchor-card" id="anchor">
       <div class="anchor-head">
@@ -635,7 +640,7 @@ h3{margin:0 0 8px;font-size:19px;line-height:1.35;letter-spacing:-.02em;font-wei
       <details class="faq"><summary>支持哪些浏览器？</summary><p>首屏会直接显示当前浏览器能力：<b>支持直写目录 / 将退回 zip / 只能 zip 下载</b>。Safari / Firefox 不支持直接写入本地文件夹时，会自动退回 zip 下载；功能还在，只是少一个直写入口。内网 http 的 OpenList 请用下载后的本地版，在线 https 版会被浏览器按混合内容阻断。</p></details>
       <details class="faq"><summary>为什么浏览器提示“可能有风险”？</summary><p>单文件 HTML 从网上下载时，部分浏览器会做保守提示，这不等于病毒结论。你可以先查看源码、用杀毒软件扫描，或在不重要的备用机试用。</p></details>
       <details class="faq"><summary>收费吗？以后会收费吗？</summary><p><b>当前免费。</b> 没有强制关注、加群或账号。以后如果增加付费服务，会提前说明，不会突然把现有功能锁掉。</p></details>
-      <details class="faq"><summary>怎么更新？第二周加集怎么办？</summary><p><b>离线冻结：</b>已下载的离线 HTML 永久可用、永不回连、永不因版本更新失效；在线版可能迭代，本地那份归你。加集时不用整库重做：把上次 zip 里的 <code>manifest.json</code> 导入，工具会对比出新增、源文件变化、未变化跳过和旧条目（默认不删），只生成变化的那几条；手工放的海报 / NFO 默认不覆盖。</p></details>
+      <details class="faq"><summary>怎么更新？第二周加集怎么办？</summary><p><b>离线冻结：</b>已下载的离线 HTML 永久可用、永不回连、永不因版本更新失效；在线版可能迭代，本地那份归你。加集时不用整库重做：导入上次 zip 里的 <code>manifest.json</code>，或开启自动上传后直接从媒体库根目录读；工具先出差异预检，列出新增、源文件变化、未变化跳过和旧条目（默认不删），片名 / 年份 / 季 / 集可逐条改、可勾选跳过，确认后才生成。默认只新增、不覆盖，手工放的海报 / NFO 原样保留；要整部重做才打开「覆盖模式」，它会二次确认。</p></details>
       <details class="faq"><summary>会把我的播放链接或签名传出去吗？</summary><p>工具只生成你媒体库里的 strm；链接里若含 <code>sign=</code> / <code>token=</code> / <code>pwd=</code>，页面会提示，并可在高级设置里选择不写签名、只写 <code>/d/</code> 路径模板。含鉴权参数的 zip 请勿外传。</p></details>
       <details class="faq"><summary>多人 / 异地播放有风控风险吗？</summary><p>有。302 直连 + 异地播放会把客户端 IP 暴露给网盘，多人或异地使用可能触发网盘风控；长期多人建议用 NAS 中转或自建反代。</p></details>
       <details class="faq"><summary>片源版权和官方合作怎么算？</summary><p>工具不含任何片源，片源版权与网盘服务条款由使用者自行负责。Jellyfin / Emby 为各自项目所有；本工具只说明兼容性，不代表官方合作或认证。</p></details>
@@ -1035,7 +1040,7 @@ const SITE_CONFIG = {
     "打开 v6.0": "Open v6.0",
     "打开在线版 v6.0": "Open v6.0 online",
     "使用": "Use",
-    "不用下载：点一下就在浏览器里打开，和官网同一个网址，不需要安装任何东西。想离线保存、拿使用说明或 NFO 示例，再下载完整包。每个生成的 zip 内含 manifest.json，第二周加集后导入即可只生成变化。": "No download needed: click once and it opens right in your browser, on this same site, with nothing to install. Download the full pack only if you want an offline copy, the usage guide, or the NFO examples. Every generated zip includes manifest.json, so next week you can import it and generate only changes.",
+    "不用下载：点一下就在浏览器里打开，和官网同一个网址，不需要安装任何东西。想离线保存、拿使用说明或 NFO 示例，再下载完整包。每次生成的 zip 都内含 manifest.json；第二周加集时，导入它或直接从媒体库根目录读，先预检差异再生成，默认只新增、不覆盖。": "No download needed: click once and it opens right in your browser, on this same site, with nothing to install. Download the full pack only if you want an offline copy, the usage guide, or the NFO examples. Every generated zip includes manifest.json; next week, import it or read it straight from the library root, preview the diff, and generate with add-only as the default.",
     "完整包里有什么": "What's in the full pack",
     "离线单文件，双击即用；在线版不用下载": "Offline single file, double-click to run; the online version needs no download",
     "在线版 / 离线版：同一构建": "Online / offline: same build",
@@ -1143,7 +1148,12 @@ const SITE_CONFIG = {
     "使用说明（含常见故障排查）": "Usage notes, including common troubleshooting",
     "4 个 NFO 示例，可直接对照": "4 sample NFO files for direct comparison",
     "单集 NFO、海报、本地封面兜底": "Episode NFO, posters, local cover fallback",
-    "manifest.json：下次导入，只生成新增和变化": "manifest.json: import next time to generate only additions and changes",
+    "生成前预检：差异、异常、跳过项都可逐条改": "Preflight before generation: review and edit diffs, warnings, and skipped rows",
+    "manifest.json：随媒体库走，可直读、可自动写回": "manifest.json: travels with the library; read it directly or write it back automatically",
+    "manifest.json：": "manifest.json: ",
+    "含路径、标题、年份、TMDB ID、封面来源，不含凭据 → 随 zip 走，自动上传时写回媒体库根目录 → 下次直读或导入，用于只新增 / 变化重写的 diff。": "contains paths, titles, years, TMDB IDs, and cover sources—no credentials. It travels with the zip and is written back to the library root when auto-upload is on; next time, read or import it to drive add-only / changed-rewrite diffs.",
+    "第二周才见真章。": "The second week is the real test.",
+    "加集、改名、删片时不用整库重做：导入上次 manifest，或直接从媒体库根目录读；先看差异预检，可逐条改片名 / 年份 / 季 / 集、勾选跳过。默认只新增、不覆盖，手工换过的海报和 NFO 原样保留；只有显式打开「覆盖模式」并二次确认，才会重写已有文件。": "No need to rebuild the whole library when episodes are added, files are renamed, or titles are removed: import the last manifest, or read it straight from the library root. Preview the diff first; you can edit the title / year / season / episode row by row and skip entries. Add-only is the default, so posters and NFO files you replaced by hand stay untouched; existing files are rewritten only when you explicitly turn on “Overwrite mode” and confirm a second time.",
     "当前免费。没有强制关注、没有加群、没有隐藏收费。下载后如果浏览器提示风险，可以先查看源码或自行杀毒扫描。已下载的离线 HTML 永久可用、永不回连、永不因版本更新失效；若未来增加付费服务，已发布版本功能不锁。": "Free for now. No mandatory follows, group chats, or hidden fees. If your browser warns about the download, inspect the source or scan it with your own antivirus. A downloaded offline HTML works forever, never calls back, and never expires with a version update; if paid services are added later, published versions remain unlocked.",
     "默认只存当前浏览器 localStorage（同源可读，风险来自浏览器扩展与共用电脑）；可勾选「仅本次会话」只留内存；可一键清除；导出配置时自动去掉 Key / Token。": "Stored by default in this browser's localStorage (same-origin readable; risk comes from browser extensions and shared computers). Tick “this session only” to keep it in memory; one-click clear; keys/tokens are stripped from exported config.",
     "只在当前页面内存里使用，关掉页面就没了；会发给你自己填的 OpenList，不写入配置，不保存到本机。": "Used only in this page's memory; gone when the page closes. It is sent to the OpenList you entered, never written to config or saved locally.",
@@ -1151,8 +1161,8 @@ const SITE_CONFIG = {
     "威胁模型一页纸：凭据从哪来 / 存哪 / 活多久 / 怎么清": "One-page threat model: where credentials come from / where stored / lifetime / how to clear",
     "怎么更新？第二周加集怎么办？": "How do I update? What about adding episodes next week?",
     "离线冻结：": "Offline freeze: ",
-    "已下载的离线 HTML 永久可用、永不回连、永不因版本更新失效；在线版可能迭代，本地那份归你。加集时不用整库重做：把上次 zip 里的": "A downloaded offline HTML works forever, never calls back, and never expires with a version update; the online version may evolve, but the local copy is yours. To add episodes, don't rebuild the whole library: import the",
-    "导入，工具会对比出新增、源文件变化、未变化跳过和旧条目（默认不删），只生成变化的那几条；手工放的海报 / NFO 默认不覆盖。": "from the last zip. The tool diffs additions, source changes, unchanged entries, and old entries (kept by default), then generates only what changed. Hand-placed posters / NFO files are never overwritten by default.",
+    "已下载的离线 HTML 永久可用、永不回连、永不因版本更新失效；在线版可能迭代，本地那份归你。加集时不用整库重做：导入上次 zip 里的": "A downloaded offline HTML works forever, never calls back, and never expires with a version update; the online version may evolve, but the local copy is yours. To add episodes, don't rebuild the whole library: import the",
+    "，或开启自动上传后直接从媒体库根目录读；工具先出差异预检，列出新增、源文件变化、未变化跳过和旧条目（默认不删），片名 / 年份 / 季 / 集可逐条改、可勾选跳过，确认后才生成。默认只新增、不覆盖，手工放的海报 / NFO 原样保留；要整部重做才打开「覆盖模式」，它会二次确认。": ", or with auto-upload on, read it straight from the library root. The tool shows a diff preflight first: additions, source changes, unchanged entries, and old entries (kept by default); edit title / year / season / episode row by row, skip entries, and generate only after confirming. Add-only is the default, so hand-placed posters / NFO files stay untouched; turn on “Overwrite mode” only to redo a whole show, and it asks for a second confirmation.",
     "会把我的播放链接或签名传出去吗？": "Will my playback links or signatures be sent out?",
     "工具只生成你媒体库里的 strm；链接里若含": "The tool only generates .strm files in your library. If a link contains",
     "，页面会提示，并可在高级设置里选择不写签名、只写": ", the page warns you and lets you omit the signature, writing only the",

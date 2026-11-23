@@ -1,6 +1,6 @@
 # manifest.json 规范（schema `yingyin-box.manifest/1`）
 
-`manifest.json` 放在每个生成 zip 的根目录，跟着媒体库目录走，不写 localStorage。它的作用是让下一次重跑能精确 diff，而不是靠文件名猜。
+`manifest.json` 放在每个生成 zip 的根目录，跟着媒体库目录走，不写 localStorage。它的作用是让下一次重跑能精确 diff，而不是靠文件名猜。开启自动上传时，全部 strm 上传成功后也会写回媒体库根目录；写回前会与根目录现有 manifest 合并，单部剧运行不会冲掉其他剧的条目。工具下次可自动读取根目录这份，也可以手动导入 zip 里的副本。
 
 ## 顶层字段
 
@@ -12,7 +12,7 @@
 | `buildDate` | string | 构建日期 `YYYY-MM-DD` |
 | `generatedAt` | string | 本次生成时间 ISO 8601 |
 | `openlistBase` | string | 生成 strm 时用的 OpenList / 播放地址根 |
-| `outputRoot` | string | 目标媒体库目录 |
+| `outputRoot` | string | 目标媒体库根目录（不是季目录） |
 | `tmdb.used` | boolean | 本次是否用了 TMDB |
 | `tmdb.language` | string | 元数据语言 |
 | `stats.generated` | number | 本次生成条数 |
@@ -36,6 +36,12 @@
 | `tmdbid` | TMDB ID；未匹配为空 |
 | `urlTemplate` | 写进 strm 的 URL 模板 |
 | `cover` | `local` / `tmdb` / `title` / 空 |
+
+## 读取与写回
+
+- **读取**：可导入 zip 里的 `manifest.json`，或从媒体库根目录直接读；开启了自动上传、且处于“只新增”模式时，生成前会自动读根目录那份并进入 diff。
+- **写回**：只有本次所有 strm 上传成功才写；写前读取根目录现有 manifest，按 `relativePath` 合并，旧条目不会被单部剧覆盖。读取现有 manifest 失败时不写，避免误删其他剧的条目。
+- **不覆盖用户文件**：manifest 只记录状态；预检和生成默认只新增，本地 `poster.jpg` / 手写 NFO 不因重跑被覆盖。
 
 ## 不含什么
 
